@@ -1,40 +1,64 @@
 [
   {
-    "batch_name": "Batch A - Foundation",
+    "batch_name": "Kota NEET UG 2026 Master Pro 1",
     "subjects": [
       {
         "subject_name": "Physics",
-        "uid": "93QC7N7F"
+        "uid": "W79Z40CU"
       },
       {
-        "subject_name": "Chemistry",
-        "uid": "G7VY8GUV"
+        "subject_name": "Organic Chemistry",
+        "uid": "UUMHOI91"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "SC406CEW"
+      },
+      {
+        "subject_name": "Zoology",
+        "uid": "76O3VNLX"
       }
     ]
   },
   {
-    "batch_name": "Batch B - Advanced",
+    "batch_name": "Kota NEET UG 2026 Master Pro 1 (H)",
     "subjects": [
       {
-        "subject_name": "Biology",
-        "uid": "BIO123ABC"
+        "subject_name": "Physics",
+        "uid": "MVRJ61XW"
       },
       {
-        "subject_name": "Mathematics",
-        "uid": "MATH456XYZ"
+        "subject_name": "Organic Chemistry",
+        "uid": "MOIXLBSC"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "8YA8R4CE"
+      },
+      {
+        "subject_name": "Zoology",
+        "uid": "IMO0KSM2"
       }
     ]
   },
   {
-    "batch_name": "Batch C - Crash Course",
+    "batch_name": "Kota NEET UG 2026 Excel 3",
     "subjects": [
       {
-        "subject_name": "History",
-        "uid": "HIST789DEF"
+        "subject_name": "Botany",
+        "uid": "Z283ZJ0E"
       },
       {
-        "subject_name": "Geography",
-        "uid": "GEO101GHI"
+        "subject_name": "Inorganic Chemistry",
+        "uid": "UJN7BIQF"
+      },
+      {
+        "subject_name": "Physics",
+        "uid": "3Q5HKXEJ"
+      },
+      {
+        "subject_name": "PHYSICS II",
+        "uid": "5IOWP8ZL"
       }
     ]
   }
