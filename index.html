@@ -620,43 +620,47 @@
                 displayLectureItems(filtered);
             });
 
-            // Initial display of all lectures
-            displayLectureItems(lecturesToDisplay);
+            // *** FIX: Call displayLectureItems here to show initial lectures ***
+            displayLectureItems(lecturesToDisplay); 
         }
 
         function displayLectureItems(lectures) {
-            // Remove existing lecture items (but keep search bar)
-            lecturesList.querySelectorAll('.lecture-item').forEach(item => item.remove());
-            lecturesList.querySelectorAll('.no-lectures-found').forEach(item => item.remove());
+            // Find the container for lecture items, which is everything after the search bar
+            let actualLectureItemsContainer = lecturesList.querySelector('#actual-lecture-items');
+            if (!actualLectureItemsContainer) {
+                actualLectureItemsContainer = document.createElement('div');
+                actualLectureItemsContainer.id = 'actual-lecture-items';
+                lecturesList.appendChild(actualLectureItemsContainer);
+            }
+            actualLectureItemsContainer.innerHTML = ''; // Clear previous lecture items
 
             if (lectures.length === 0) {
                 const noLecturesMsg = document.createElement('p');
                 noLecturesMsg.className = 'no-lectures-found';
                 noLecturesMsg.textContent = 'No lectures found matching your search.';
-                lecturesList.appendChild(noLecturesMsg);
-                return;
+                actualLectureItemsContainer.appendChild(noLecturesMsg);
+            } else {
+                lectures.forEach(lecture => {
+                    const lectureItem = document.createElement('div');
+                    lectureItem.className = 'lecture-item';
+                    lectureItem.innerHTML = `
+                        <h3>${lecture.title}</h3>
+                        <div class="lecture-meta">
+                            <span><strong>Teacher:</strong> ${lecture.teacher}</span>
+                            <span><strong>Date:</strong> ${lecture.dateStr}</span> <!-- FIX: Ensure dateStr is used here -->
+                        </div>
+                        <div class="lecture-actions">
+                            ${lecture.video_url ? `<button class="watch-online" data-video-url="${lecture.video_url}">Watch Online</button>` : ''}
+                            ${lecture.video_url ? `<a href="${lecture.video_url}" download="${lecture.title}.webm">Download Video</a>` : ''}
+                            ${lecture.pdf_url ? `<a href="${lecture.pdf_url}" download="${lecture.title}.pdf" class="pdf-link">Download PDF</a>` : ''}
+                        </div>
+                    `;
+                    actualLectureItemsContainer.appendChild(lectureItem);
+                });
             }
-
-            lectures.forEach(lecture => {
-                const lectureItem = document.createElement('div');
-                lectureItem.className = 'lecture-item';
-                lectureItem.innerHTML = `
-                    <h3>${lecture.title}</h3>
-                    <div class="lecture-meta">
-                        <span><strong>Teacher:</strong> ${lecture.teacher}</span>
-                        <span><strong>Date:</strong> ${lecture.dateStr}</span>
-                    </div>
-                    <div class="lecture-actions">
-                        ${lecture.video_url ? `<button class="watch-online" data-video-url="${lecture.video_url}">Watch Online</button>` : ''}
-                        ${lecture.video_url ? `<a href="${lecture.video_url}" download="${lecture.title}.webm">Download Video</a>` : ''}
-                        ${lecture.pdf_url ? `<a href="${lecture.pdf_url}" download="${lecture.title}.pdf" class="pdf-link">Download PDF</a>` : ''}
-                    </div>
-                `;
-                lecturesList.appendChild(lectureItem);
-            });
-
+            
             // Add event listeners for "Watch Online" buttons to newly added lectures
-            lecturesList.querySelectorAll('.watch-online').forEach(button => {
+            actualLectureItemsContainer.querySelectorAll('.watch-online').forEach(button => {
                 button.addEventListener('click', (event) => {
                     const videoUrl = event.target.dataset.videoUrl;
                     lectureVideoPlayer.src = videoUrl;
