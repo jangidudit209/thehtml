@@ -378,20 +378,15 @@
 
     <script>
         // Utility functions
-        function parseLectureDate(created_at) {
+        function parseLectureDate(dateString) {
             try {
-                // Ensure the string is in a format Date.parse can handle reliably, e.g., 'YYYY-MM-DDTHH:MM:SS.sssZ'
-                // If it's missing milliseconds or 'Z', add them for consistency.
-                let dateString = created_at;
-                if (!dateString.endsWith('Z')) {
-                    dateString += 'Z'; // Assume UTC if no timezone info, and add 'Z'
-                }
-                
+                // The 'liveAt' field is typically in ISO 8601 format (e.g., "2025-07-30T10:05:00Z")
+                // Date constructor handles 'Z' (UTC) correctly.
                 const utcTime = new Date(dateString);
 
                 // Check if parsing resulted in an invalid date
                 if (isNaN(utcTime.getTime())) {
-                    console.warn(`Failed to parse date string: ${created_at}. Resulted in Invalid Date.`);
+                    console.warn(`Failed to parse date string: ${dateString}. Resulted in Invalid Date.`);
                     return null;
                 }
 
@@ -402,7 +397,7 @@
                 
                 return istTime; // Return Date object for sorting
             } catch (e) {
-                console.warn(`Error parsing date ${created_at}: ${e}`);
+                console.warn(`Error parsing date ${dateString}: ${e}`);
                 return null;
             }
         }
@@ -548,8 +543,10 @@
                     const liveClass = value.live_class || {};
                     const author = liveClass.author || {};
                     const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
-                    const createdAt = liveClass.created_at || "";
-                    const lectureDateObj = parseLectureDate(createdAt);
+                    
+                    // *** CRITICAL CHANGE: Use liveAt instead of created_at ***
+                    const liveAt = liveClass.liveAt || ""; 
+                    const lectureDateObj = parseLectureDate(liveAt);
                     
                     // Format date for display
                     const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
