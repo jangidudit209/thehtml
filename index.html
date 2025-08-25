@@ -3,420 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unacademy Lectures Hub - Polished</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Unacademy Lectures Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6a0dad; /* Deep Purple */
-            --secondary-color: #8e44ad; /* Medium Purple */
-            --accent-color: #2ecc71; /* Emerald Green */
-            --bg-light: #f0f2f5; /* Light Grayish Blue */
-            --bg-dark: #e0e2e5; /* Slightly darker gray */
-            --text-dark: #333333; /* Dark Gray */
-            --text-light: #ffffff; /* White */
-            --border-color: #dcdcdc; /* Light Gray */
-            --shadow-light: rgba(0, 0, 0, 0.08);
-            --shadow-hover: rgba(0, 0, 0, 0.15);
-            --card-bg: #ffffff;
-            --card-hover-bg: #f9f9f9;
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --accent-color: #28a745;
+            --bg-light: #f8f9fa;
+            --bg-dark: #e9ecef;
+            --text-dark: #343a40;
+            --text-light: #ffffff;
+            --border-color: #dee2e6;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(0, 0, 0, 0.2);
+            --folder-bg: #ffffff;
+            --folder-hover-bg: #f0f0f0;
+            --folder-active-bg: #e0e0e0;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--bg-light);
             color: var(--text-dark);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-color: var(--primary-color);
             color: var(--text-light);
-            padding: 30px 0;
+            padding: 20px 0;
             text-align: center;
-            box-shadow: 0 4px 15px var(--shadow-light);
+            box-shadow: 0 2px 4px var(--shadow-light);
         }
 
         .header h1 {
             margin: 0;
             font-weight: 700;
-            font-size: 2.8em;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            margin-top: 10px;
-            opacity: 0.9;
+            font-size: 2.5em;
         }
 
         .container {
             max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 25px;
+            margin: 20px auto;
+            padding: 0 20px;
         }
 
         .section-title {
-            font-size: 2.2em;
-            font-weight: 700;
+            font-size: 2em;
+            font-weight: 600;
             color: var(--primary-color);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-align: center;
-            position: relative;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background-color: var(--accent-color);
-            margin: 10px auto 0;
-            border-radius: 2px;
+        /* Folder Structure */
+        .folder-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--shadow-light);
+            padding: 20px;
         }
 
-        /* Grid for Folders (Cards) */
-        .folder-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Slightly smaller cards */
-            gap: 25px;
-            margin-bottom: 40px;
+        .folder-item {
+            background-color: var(--folder-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
         }
 
-        .folder-card {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px var(--shadow-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .folder-header {
+            padding: 15px 20px;
+            font-size: 1.2em;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            padding: 25px;
-            text-align: center;
-            position: relative;
-            aspect-ratio: 1 / 1; /* Keep it square */
-            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
         }
 
-        .folder-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 25px var(--shadow-hover);
-            background-color: var(--card-hover-bg);
+        .folder-header:hover {
+            background-color: var(--folder-hover-bg);
         }
 
-        .folder-card.active {
-            background-color: var(--bg-dark);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) inset;
-            transform: translateY(0); /* Reset transform if active */
+        .folder-header.active {
+            background-color: var(--folder-active-bg);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .folder-card .folder-icon {
-            font-size: 3.5em; /* Slightly larger icon */
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            transition: color 0.3s ease;
+        .folder-header .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
         }
 
-        .folder-card:hover .folder-icon {
-            color: var(--accent-color);
+        .folder-header.active .toggle-icon {
+            transform: rotate(90deg);
         }
 
-        .folder-card h3 {
-            margin: 0;
-            font-size: 1.15em;
-            font-weight: 600;
-            color: var(--text-dark);
-            word-break: break-word;
-            line-height: 1.3;
-        }
-
-        /* Content Area for Subjects/Lectures */
-        .content-area {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px var(--shadow-light);
-            padding: 35px;
-            min-height: 300px;
+        .folder-content {
             display: none;
-            animation: fadeInScale 0.5s ease-out forwards;
-            border: 1px solid var(--border-color);
+            padding: 10px 20px 15px;
+            background-color: var(--bg-light);
         }
 
-        .content-area.active {
+        .folder-content.active {
             display: block;
         }
 
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        /* Subject specific styling */
+        .subject-item .folder-header {
+            font-size: 1.1em;
+            padding: 12px 15px;
+            background-color: var(--bg-light);
+        }
+        .subject-item .folder-header:hover {
+            background-color: var(--bg-dark);
+        }
+        .subject-item .folder-header.active {
+            background-color: var(--bg-dark);
         }
 
-        .content-area .back-button {
-            background-color: var(--secondary-color);
-            color: var(--text-light);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            margin-bottom: 30px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .content-area .back-button:hover {
-            background-color: #7b3fa0;
-            transform: translateY(-3px);
-        }
-
-        /* Lecture List */
+        /* Lecture Details */
         .lecture-list {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .lecture-item {
-            background-color: var(--bg-light);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
             border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px var(--shadow-light);
         }
 
-        .lecture-item h4 {
+        .lecture-item h3 {
             margin-top: 0;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: var(--primary-color);
-            font-size: 1.4em;
-            font-weight: 600;
+            font-size: 1.2em;
         }
 
         .lecture-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 18px;
-            font-size: 0.95em;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
             color: var(--secondary-color);
         }
 
         .lecture-meta span {
-            background-color: var(--card-bg);
-            padding: 10px 15px;
-            border-radius: 8px;
+            background-color: var(--bg-light);
+            padding: 5px 10px;
+            border-radius: 5px;
             border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .lecture-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
 
         .lecture-actions a, .lecture-actions button {
             background-color: var(--primary-color);
             color: var(--text-light);
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 8px 15px;
+            border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
-            font-size: 0.95em;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
         }
 
         .lecture-actions a:hover, .lecture-actions button:hover {
-            background-color: #5a0999;
-            transform: translateY(-3px);
+            background-color: #0056b3;
         }
 
         .lecture-actions a.pdf-link {
-            background-color: #e74c3c; /* Alizarin Red */
+            background-color: #dc3545;
         }
         .lecture-actions a.pdf-link:hover {
-            background-color: #c0392b;
+            background-color: #c82333;
         }
 
         .lecture-actions button.watch-online {
             background-color: var(--accent-color);
         }
         .lecture-actions button.watch-online:hover {
-            background-color: #27ae60;
+            background-color: #218838;
         }
 
-        /* Loading and Error States */
         .loading, .error-message {
             text-align: center;
-            padding: 40px;
-            font-size: 1.3em;
+            padding: 20px;
+            font-size: 1.1em;
             color: var(--secondary-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .loading .spinner {
-            border: 5px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--primary-color);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .error-message {
-            color: #e74c3c;
+            color: #dc3545;
         }
 
         /* Video Player Modal */
         .video-player-modal {
             display: none;
             position: fixed;
-            z-index: 1001;
+            z-index: 1001; /* Above lecture modal */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.95);
+            background-color: rgba(0,0,0,0.9);
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
         }
         .video-player-content {
-            background-color: #000;
-            padding: 25px;
-            border-radius: 20px;
+            background-color: #000; /* Black background for video */
+            padding: 20px;
+            border-radius: 10px;
             width: 90%;
-            max-width: 1100px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            max-width: 1000px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
             position: relative;
-            animation: zoomInFade 0.4s ease-out;
         }
-
-        @keyframes zoomInFade {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
         .video-player-content .close-button {
             color: #fff;
             position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 40px;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        .video-player-content .close-button:hover {
-            color: var(--accent-color);
         }
         video {
             width: 100%;
             height: auto;
-            max-height: 75vh;
+            max-height: 70vh;
             display: block;
             margin: 0 auto;
-            border-radius: 10px;
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 2.2em;
-            }
-            .header p {
-                font-size: 1em;
+                font-size: 2em;
             }
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 20px;
             }
-            .container {
-                padding: 0 15px;
+            .folder-container {
+                padding: 10px;
             }
-            .folder-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Smaller cards for mobile */
-                gap: 15px;
+            .folder-header {
+                font-size: 1.1em;
+                padding: 12px 15px;
             }
-            .folder-card {
-                padding: 15px;
-                border-radius: 10px;
-            }
-            .folder-card .folder-icon {
-                font-size: 2.5em;
-                margin-bottom: 10px;
-            }
-            .folder-card h3 {
-                font-size: 0.95em;
-            }
-            .content-area {
-                padding: 20px;
-                border-radius: 10px;
-            }
-            .content-area .back-button {
-                padding: 10px 18px;
-                font-size: 0.9em;
-                margin-bottom: 20px;
-            }
-            .lecture-item {
-                padding: 15px;
-                margin-bottom: 15px;
-                border-radius: 10px;
-            }
-            .lecture-item h4 {
-                font-size: 1.2em;
-                margin-bottom: 10px;
+            .folder-content {
+                padding: 5px 15px 10px;
             }
             .lecture-meta {
                 flex-direction: column;
                 gap: 10px;
-                margin-bottom: 15px;
-            }
-            .lecture-meta span {
-                padding: 8px 12px;
-                font-size: 0.9em;
             }
             .lecture-actions {
                 flex-direction: column;
-                gap: 10px;
-            }
-            .lecture-actions a, .lecture-actions button {
-                width: 100%;
-                justify-content: center;
-                padding: 10px 15px;
-                font-size: 0.9em;
-            }
-            .video-player-content {
-                padding: 15px;
-                border-radius: 15px;
-            }
-            .video-player-content .close-button {
-                font-size: 35px;
-                top: 15px;
-                right: 20px;
+                gap: 8px;
             }
         }
     </style>
@@ -428,32 +290,9 @@
     </div>
 
     <div class="container">
-        <h2 class="section-title" id="current-section-title">Explore Batches</h2>
-
-        <!-- Batches Grid -->
-        <div id="batches-grid" class="folder-grid">
-            <p class="loading">
-                <span class="spinner"></span>
-                Loading batches...
-            </p>
-        </div>
-
-        <!-- Subjects Content Area -->
-        <div id="subjects-content-area" class="content-area">
-            <button class="back-button" id="backToBatches"><i class="fas fa-arrow-left"></i> Back to Batches</button>
-            <h3 class="section-title" id="subjects-section-title"></h3>
-            <div id="subjects-grid" class="folder-grid">
-                <!-- Subjects will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Lectures Content Area -->
-        <div id="lectures-content-area" class="content-area">
-            <button class="back-button" id="backToSubjects"><i class="fas fa-arrow-left"></i> Back to Subjects</button>
-            <h3 class="section-title" id="lectures-section-title"></h3>
-            <div id="lectures-list" class="lecture-list">
-                <!-- Lectures will be loaded here -->
-            </div>
+        <h2 class="section-title">Explore Batches</h2>
+        <div id="batches-container" class="folder-container">
+            <p class="loading">Loading batches...</p>
         </div>
     </div>
 
@@ -469,7 +308,9 @@
         // Utility functions
         function parseLectureDate(created_at) {
             try {
+                // Parse UTC time
                 const utcTime = new Date(created_at.replace("Z", ""));
+                // Convert to IST (UTC + 5:30)
                 const istTime = new Date(utcTime.getTime() + (5 * 60 + 30) * 60 * 1000);
                 return istTime; // Return Date object for sorting
             } catch (e) {
@@ -478,247 +319,209 @@
             }
         }
 
-        // DOM Elements
-        const batchesGrid = document.getElementById('batches-grid');
-        const subjectsContentArea = document.getElementById('subjects-content-area');
-        const subjectsGrid = document.getElementById('subjects-grid');
-        const lecturesContentArea = document.getElementById('lectures-content-area');
-        const lecturesList = document.getElementById('lectures-list');
-        const currentSectionTitle = document.getElementById('current-section-title');
-        const subjectsSectionTitle = document.getElementById('subjects-section-title');
-        const lecturesSectionTitle = document.getElementById('lectures-section-title');
+        // Main application logic
+        document.addEventListener('DOMContentLoaded', async () => {
+            const batchesContainer = document.getElementById('batches-container');
+            const videoPlayerModal = document.getElementById('videoPlayerModal');
+            const closeVideoPlayerModal = document.getElementById('closeVideoPlayerModal');
+            const lectureVideoPlayer = document.getElementById('lectureVideoPlayer');
 
-        const backToBatchesButton = document.getElementById('backToBatches');
-        const backToSubjectsButton = document.getElementById('backToSubjects');
-
-        const videoPlayerModal = document.getElementById('videoPlayerModal');
-        const closeVideoPlayerModal = document.getElementById('closeVideoPlayerModal');
-        const lectureVideoPlayer = document.getElementById('lectureVideoPlayer');
-
-        let allBatchesData = []; // Store all batches data
-
-        // State management for navigation
-        let currentView = 'batches'; // 'batches', 'subjects', 'lectures'
-        let currentBatch = null; // Stores the currently selected batch object
-        let currentSubject = null; // Stores the currently selected subject object
-
-        // --- Navigation Functions ---
-        function showView(view) {
-            batchesGrid.classList.remove('active');
-            subjectsContentArea.classList.remove('active');
-            lecturesContentArea.classList.remove('active');
-
-            if (view === 'batches') {
-                batchesGrid.classList.add('active');
-                currentSectionTitle.textContent = 'Explore Batches';
-                currentView = 'batches';
-            } else if (view === 'subjects') {
-                subjectsContentArea.classList.add('active');
-                currentSectionTitle.textContent = 'Explore Subjects';
-                currentView = 'subjects';
-            } else if (view === 'lectures') {
-                lecturesContentArea.classList.add('active');
-                currentSectionTitle.textContent = 'Explore Lectures';
-                currentView = 'lectures';
-            }
-        }
-
-        backToBatchesButton.addEventListener('click', () => {
-            showView('batches');
-            currentBatch = null;
-            currentSubject = null;
-        });
-
-        backToSubjectsButton.addEventListener('click', () => {
-            showView('subjects');
-            currentSubject = null;
-            renderSubjects(currentBatch.subjects, subjectsGrid, currentBatch.batch_name); // Re-render subjects for current batch
-        });
-
-        // --- Modal Functions ---
-        closeVideoPlayerModal.onclick = () => {
-            videoPlayerModal.style.display = 'none';
-            lectureVideoPlayer.pause();
-            lectureVideoPlayer.src = ''; // Clear video source
-        };
-
-        window.onclick = (event) => {
-            if (event.target == videoPlayerModal) {
+            // Close video player modal
+            closeVideoPlayerModal.onclick = () => {
                 videoPlayerModal.style.display = 'none';
                 lectureVideoPlayer.pause();
-                lectureVideoPlayer.src = '';
-            }
-        };
+                lectureVideoPlayer.src = ''; // Clear video source
+            };
 
-        // --- Data Fetching and Rendering ---
-        async function fetchBatchesData() {
-            batchesGrid.innerHTML = `
-                <p class="loading">
-                    <span class="spinner"></span>
-                    Loading batches...
-                </p>
-            `;
-            try {
-                const response = await fetch('/batches.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+            window.onclick = (event) => {
+                if (event.target == videoPlayerModal) {
+                    videoPlayerModal.style.display = 'none';
+                    lectureVideoPlayer.pause();
+                    lectureVideoPlayer.src = '';
                 }
-                allBatchesData = await response.json();
-                renderBatches(allBatchesData);
-                showView('batches'); // Ensure batches are shown initially
-            } catch (error) {
-                batchesGrid.innerHTML = `<p class="error-message"><i class="fas fa-exclamation-triangle"></i> Error loading batches: ${error.message}</p>`;
-                console.error('Error fetching batches.json:', error);
-            }
-        }
+            };
 
-        function renderBatches(batches) {
-            batchesGrid.innerHTML = ''; // Clear loading message
-            batches.forEach((batch, batchIndex) => {
-                const batchCard = document.createElement('div');
-                batchCard.className = 'folder-card';
-                batchCard.innerHTML = `
-                    <i class="fas fa-folder folder-icon"></i>
-                    <h3>${batch.batch_name}</h3>
-                `;
-                batchCard.addEventListener('click', () => {
-                    currentBatch = batch;
-                    renderSubjects(batch.subjects, subjectsGrid, batch.batch_name);
-                    showView('subjects');
-                });
-                batchesGrid.appendChild(batchCard);
-            });
-        }
-
-        function renderSubjects(subjects, targetDiv, batchName) {
-            subjectsGrid.innerHTML = `
-                <p class="loading">
-                    <span class="spinner"></span>
-                    Loading subjects...
-                </p>
-            `;
-            subjectsSectionTitle.textContent = `Subjects in ${batchName}`;
-            targetDiv.innerHTML = ''; // Clear loading message
-            subjects.forEach((subject, subjectIndex) => {
-                const subjectCard = document.createElement('div');
-                subjectCard.className = 'folder-card';
-                subjectCard.innerHTML = `
-                    <i class="fas fa-book folder-icon"></i>
-                    <h3>${subject.subject_name}</h3>
-                `;
-                subjectCard.addEventListener('click', () => {
-                    currentSubject = subject;
-                    fetchLectures(subject.uid, lecturesList, subject.subject_name);
-                    showView('lectures');
-                });
-                targetDiv.appendChild(subjectCard);
-            });
-        }
-
-        async function fetchLectures(uid, targetDiv, subjectName) {
-            lecturesList.innerHTML = `
-                <p class="loading">
-                    <span class="spinner"></span>
-                    Fetching lectures for ${subjectName}...
-                </p>
-            `;
-            lecturesSectionTitle.textContent = `Lectures in ${subjectName}`;
-            try {
-                const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                const results = data.results || [];
-
-                renderLectures(results, targetDiv);
-
-            } catch (error) {
-                lecturesList.innerHTML = `<p class="error-message"><i class="fas fa-exclamation-triangle"></i> Error fetching lectures for UID ${uid}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
-                console.error('Error fetching lectures:', error);
-            }
-        }
-
-        function renderLectures(results, targetDiv) {
-            if (results.length === 0) {
-                targetDiv.innerHTML = '<p class="loading">No lectures found for this subject.</p>';
-                return;
-            }
-
-            const processedLectures = results.map(item => {
-                const value = item.value || {};
-                const title = (value.title || "No Title").trim();
-                const liveClass = value.live_class || {};
-                const author = liveClass.author || {};
-                const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
-                const createdAt = liveClass.created_at || "";
-                const lectureDateObj = parseLectureDate(createdAt);
-                const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
-
-                let downloadableVideoLink = null;
-                const videoUrl = liveClass.video_url || "";
-                if (videoUrl.includes("uid=")) {
-                    try {
-                        const videoUid = videoUrl.split("uid=")[1].split("&")[0];
-                        downloadableVideoLink = `https://uamedia.uacdn.net/lesson-raw/${videoUid}/output.webm`;
-                    } catch (e) {
-                        console.warn(`Could not parse video UID from ${videoUrl}: ${e}`);
+            async function fetchBatches() {
+                try {
+                    const response = await fetch('/batches.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
+                    const batches = await response.json();
+                    renderBatches(batches);
+                } catch (error) {
+                    batchesContainer.innerHTML = `<p class="error-message">Error loading batches: ${error.message}</p>`;
+                    console.error('Error fetching batches.json:', error);
+                }
+            }
+
+            function renderBatches(batches) {
+                batchesContainer.innerHTML = ''; // Clear loading message
+                batches.forEach((batch, batchIndex) => {
+                    const batchItem = document.createElement('div');
+                    batchItem.className = 'folder-item batch-item';
+                    batchItem.innerHTML = `
+                        <div class="folder-header" data-target="batch-content-${batchIndex}">
+                            <span>${batch.batch_name}</span>
+                            <span class="toggle-icon">&#9654;</span> <!-- Right arrow -->
+                        </div>
+                        <div id="batch-content-${batchIndex}" class="folder-content">
+                            <!-- Subjects will be loaded here -->
+                            <p class="loading">Loading subjects...</p>
+                        </div>
+                    `;
+                    batchesContainer.appendChild(batchItem);
+
+                    const batchHeader = batchItem.querySelector('.folder-header');
+                    const batchContent = batchItem.querySelector('.folder-content');
+
+                    batchHeader.addEventListener('click', () => {
+                        batchHeader.classList.toggle('active');
+                        batchContent.classList.toggle('active');
+                        if (batchContent.classList.contains('active')) {
+                            // Load subjects only when batch is opened for the first time
+                            if (batchContent.querySelector('.loading')) {
+                                renderSubjects(batch.subjects, batchContent);
+                            }
+                        }
+                    });
+                });
+            }
+
+            function renderSubjects(subjects, targetDiv) {
+                targetDiv.innerHTML = ''; // Clear loading message
+                subjects.forEach((subject, subjectIndex) => {
+                    const subjectItem = document.createElement('div');
+                    subjectItem.className = 'folder-item subject-item';
+                    subjectItem.innerHTML = `
+                        <div class="folder-header" data-target="subject-content-${subject.uid}">
+                            <span>${subject.subject_name}</span>
+                            <span class="toggle-icon">&#9654;</span> <!-- Right arrow -->
+                        </div>
+                        <div id="subject-content-${subject.uid}" class="folder-content lecture-list">
+                            <!-- Lectures will be loaded here -->
+                            <p class="loading">Loading lectures...</p>
+                        </div>
+                    `;
+                    targetDiv.appendChild(subjectItem);
+
+                    const subjectHeader = subjectItem.querySelector('.folder-header');
+                    const subjectContent = subjectItem.querySelector('.folder-content');
+
+                    subjectHeader.addEventListener('click', () => {
+                        subjectHeader.classList.toggle('active');
+                        subjectContent.classList.toggle('active');
+                        if (subjectContent.classList.contains('active')) {
+                            // Load lectures only when subject is opened for the first time
+                            if (subjectContent.querySelector('.loading')) {
+                                fetchLectures(subject.uid, subjectContent);
+                            }
+                        }
+                    });
+                });
+            }
+
+            async function fetchLectures(uid, targetDiv) {
+                targetDiv.innerHTML = '<p class="loading">Fetching lectures for UID: ' + uid + '...</p>';
+                try {
+                    const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    const results = data.results || [];
+
+                    renderLectures(results, targetDiv);
+
+                } catch (error) {
+                    targetDiv.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
+                    console.error('Error fetching lectures:', error);
+                }
+            }
+
+            function renderLectures(results, targetDiv) {
+                if (results.length === 0) {
+                    targetDiv.innerHTML = '<p>No lectures found for this subject.</p>';
+                    return;
                 }
 
-                const slidesPdf = liveClass.slides_pdf || {};
-                const pdfLink = slidesPdf.with_annotation || null;
+                // Process and sort lectures
+                const processedLectures = results.map(item => {
+                    const value = item.value || {};
+                    const title = (value.title || "No Title").trim();
+                    const liveClass = value.live_class || {};
+                    const author = liveClass.author || {};
+                    const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
+                    const createdAt = liveClass.created_at || "";
+                    const lectureDateObj = parseLectureDate(createdAt);
+                    const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
 
-                return {
-                    title,
-                    teacher,
-                    dateObj: lectureDateObj,
-                    dateStr: lectureDateStr,
-                    video_url: downloadableVideoLink,
-                    pdf_url: pdfLink
-                };
-            });
+                    let downloadableVideoLink = null;
+                    const videoUrl = liveClass.video_url || "";
+                    if (videoUrl.includes("uid=")) {
+                        try {
+                            const videoUid = videoUrl.split("uid=")[1].split("&")[0];
+                            downloadableVideoLink = `https://uamedia.uacdn.net/lesson-raw/${videoUid}/output.webm`;
+                        } catch (e) {
+                            console.warn(`Could not parse video UID from ${videoUrl}: ${e}`);
+                        }
+                    }
 
-            processedLectures.sort((a, b) => {
-                if (!a.dateObj && !b.dateObj) return 0;
-                if (!a.dateObj) return 1;
-                if (!b.dateObj) return -1;
-                return b.dateObj.getTime() - a.dateObj.getTime(); // Newest first
-            });
+                    const slidesPdf = liveClass.slides_pdf || {};
+                    const pdfLink = slidesPdf.with_annotation || null;
 
-            targetDiv.innerHTML = ''; // Clear loading message
-
-            processedLectures.forEach(lecture => {
-                const lectureItem = document.createElement('div');
-                lectureItem.className = 'lecture-item';
-                lectureItem.innerHTML = `
-                    <h4>${lecture.title}</h4>
-                    <div class="lecture-meta">
-                        <span><i class="fas fa-chalkboard-teacher"></i> ${lecture.teacher}</span>
-                        <span><i class="fas fa-calendar-alt"></i> ${lecture.dateStr}</span>
-                    </div>
-                    <div class="lecture-actions">
-                        ${lecture.video_url ? `<button class="watch-online" data-video-url="${lecture.video_url}"><i class="fas fa-play-circle"></i> Watch Online</button>` : ''}
-                        ${lecture.video_url ? `<a href="${lecture.video_url}" download="${lecture.title}.webm"><i class="fas fa-download"></i> Download Video</a>` : ''}
-                        ${lecture.pdf_url ? `<a href="${lecture.pdf_url}" download="${lecture.title}.pdf" class="pdf-link"><i class="fas fa-file-pdf"></i> Download PDF</a>` : ''}
-                    </div>
-                `;
-                targetDiv.appendChild(lectureItem);
-            });
-
-            document.querySelectorAll('.watch-online').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const videoUrl = event.target.dataset.videoUrl;
-                    lectureVideoPlayer.src = videoUrl;
-                    videoPlayerModal.style.display = 'flex';
-                    lectureVideoPlayer.play();
+                    return {
+                        title,
+                        teacher,
+                        dateObj: lectureDateObj, // For sorting
+                        dateStr: lectureDateStr, // For display
+                        video_url: downloadableVideoLink,
+                        pdf_url: pdfLink
+                    };
                 });
-            });
-        }
 
-        // Initialize the app
-        fetchBatchesData();
+                // Sort lectures by date (newest first)
+                processedLectures.sort((a, b) => {
+                    if (!a.dateObj && !b.dateObj) return 0;
+                    if (!a.dateObj) return 1; // Null dates go to the end
+                    if (!b.dateObj) return -1;
+                    return b.dateObj.getTime() - a.dateObj.getTime(); // Newest first
+                });
+
+                targetDiv.innerHTML = ''; // Clear loading message
+
+                processedLectures.forEach(lecture => {
+                    const lectureItem = document.createElement('div');
+                    lectureItem.className = 'lecture-item';
+                    lectureItem.innerHTML = `
+                        <h3>${lecture.title}</h3>
+                        <div class="lecture-meta">
+                            <span><strong>Teacher:</strong> ${lecture.teacher}</span>
+                            <span><strong>Date:</strong> ${lecture.dateStr}</span>
+                        </div>
+                        <div class="lecture-actions">
+                            ${lecture.video_url ? `<button class="watch-online" data-video-url="${lecture.video_url}">Watch Online</button>` : ''}
+                            ${lecture.video_url ? `<a href="${lecture.video_url}" download="${lecture.title}.webm">Download Video</a>` : ''}
+                            ${lecture.pdf_url ? `<a href="${lecture.pdf_url}" download="${lecture.title}.pdf" class="pdf-link">Download PDF</a>` : ''}
+                        </div>
+                    `;
+                    targetDiv.appendChild(lectureItem);
+                });
+
+                // Add event listeners for "Watch Online" buttons
+                document.querySelectorAll('.watch-online').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const videoUrl = event.target.dataset.videoUrl;
+                        lectureVideoPlayer.src = videoUrl;
+                        videoPlayerModal.style.display = 'flex';
+                        lectureVideoPlayer.play();
+                    });
+                });
+            }
+
+            fetchBatches();
+        });
     </script>
 </body>
 </html>
