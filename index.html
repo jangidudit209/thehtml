@@ -390,11 +390,17 @@
 
                 // Convert UTC to IST (UTC + 5:30)
                 // getTime() returns milliseconds since epoch. Add milliseconds for 5 hours 30 minutes.
+                // The Date object itself handles timezones when formatting.
+                // To get IST, we can either manually add the offset or use toLocaleString with 'en-IN' locale and 'Asia/Kolkata' timezone.
+                // For sorting, the UTC Date object is fine. For display, we format it.
+
+                // To ensure the date object itself reflects IST for consistent sorting and display,
+                // we can create a new Date object with the adjusted UTC milliseconds.
                 const istOffsetMillis = (5 * 60 + 30) * 60 * 1000;
                 const istTime = new Date(utcTime.getTime() + istOffsetMillis);
-                console.log(`parseLectureDate: IST Time:`, istTime);
+                console.log(`parseLectureDate: IST Time (adjusted Date object):`, istTime);
                 
-                return istTime; // Return Date object for sorting
+                return istTime; // Return Date object for sorting and later formatting
             } catch (e) {
                 console.error(`parseLectureDate: Critical error during parsing of '${dateString}':`, e);
                 return null;
