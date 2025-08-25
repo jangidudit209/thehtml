@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unacademy Lectures Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --accent-color: #28a745;
+            --bg-light: #f8f9fa;
+            --bg-dark: #e9ecef;
+            --text-dark: #343a40;
+            --text-light: #ffffff;
+            --border-color: #dee2e6;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px var(--shadow-light);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.5em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--shadow-light);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--shadow-hover);
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 15px;
+            flex-grow: 1;
+        }
+
+        .card-body ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card-body ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body ul li:last-child {
+            border-bottom: none;
+        }
+
+        .card-body ul li span {
+            font-weight: 400;
+        }
+
+        .card-body ul li button {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .card-body ul li button:hover {
+            background-color: #218838;
+        }
+
+        .loading, .error-message {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.1em;
+            color: var(--secondary-color);
+        }
+
+        .error-message {
+            color: #dc3545;
+        }
+
+        /* Lecture Details Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow-hover);
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-button {
+            color: var(--secondary-color);
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--text-dark);
+        }
+
+        .modal-header {
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.8em;
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 10px; /* For scrollbar */
+        }
+
+        .lecture-item {
+            background-color: var(--bg-dark);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lecture-item h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 1.3em;
+        }
+
+        .lecture-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .lecture-meta span {
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .lecture-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .lecture-actions a, .lecture-actions button {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lecture-actions a:hover, .lecture-actions button:hover {
+            background-color: #0056b3;
+        }
+
+        .lecture-actions a.pdf-link {
+            background-color: #dc3545;
+        }
+        .lecture-actions a.pdf-link:hover {
+            background-color: #c82333;
+        }
+
+        .lecture-actions button.watch-online {
+            background-color: var(--accent-color);
+        }
+        .lecture-actions button.watch-online:hover {
+            background-color: #218838;
+        }
+
+        /* Video Player Modal */
+        .video-player-modal {
+            display: none;
+            position: fixed;
+            z-index: 1001; /* Above lecture modal */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+        .video-player-content {
+            background-color: #000; /* Black background for video */
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1000px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .video-player-content .close-button {
+            color: #fff;
+            top: 10px;
+            right: 20px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.8em;
+            }
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            .close-button {
+                font-size: 24px;
+                top: 10px;
+                right: 15px;
+            }
+            .lecture-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .lecture-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Unacademy Lectures Hub</h1>
+        <p>Your gateway to organized Unacademy content.</p>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">Explore Batches</h2>
+        <div id="batches-grid" class="grid-container">
+            <p class="loading">Loading batches...</p>
+        </div>
+    </div>
+
+    <!-- Lecture Details Modal -->
+    <div id="lectureDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeLectureDetailsModal">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalSubjectTitle"></h2>
+            </div>
+            <div class="modal-body" id="lecturesList">
+                <!-- Lectures will be loaded here -->
+                <p class="loading">Loading lectures...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="videoPlayerModal" class="video-player-modal">
+        <div class="video-player-content">
+            <span class="close-button" id="closeVideoPlayerModal">&times;</span>
+            <video id="lectureVideoPlayer" controls autoplay></video>
+        </div>
+    </div>
+
+    <script>
+        // Utility functions (from bot.py, adapted for browser)
+        function parseLectureDate(created_at) {
+            try {
+                const utcTime = new Date(created_at.replace("Z", ""));
+                // Convert to IST (UTC + 5:30)
+                const istTime = new Date(utcTime.getTime() + (5 * 60 + 30) * 60 * 1000);
+                return istTime.toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            } catch (e) {
+                console.warn(`Failed to parse date ${created_at}: ${e}`);
+                return "Unknown Date";
+            }
+        }
+
+        // Main application logic
+        document.addEventListener('DOMContentLoaded', async () => {
+            const batchesGrid = document.getElementById('batches-grid');
+            const lectureDetailsModal = document.getElementById('lectureDetailsModal');
+            const closeLectureDetailsModal = document.getElementById('closeLectureDetailsModal');
+            const modalSubjectTitle = document.getElementById('modalSubjectTitle');
+            const lecturesList = document.getElementById('lecturesList');
+
+            const videoPlayerModal = document.getElementById('videoPlayerModal');
+            const closeVideoPlayerModal = document.getElementById('closeVideoPlayerModal');
+            const lectureVideoPlayer = document.getElementById('lectureVideoPlayer');
+
+            // Close modals
+            closeLectureDetailsModal.onclick = () => lectureDetailsModal.style.display = 'none';
+            closeVideoPlayerModal.onclick = () => {
+                videoPlayerModal.style.display = 'none';
+                lectureVideoPlayer.pause();
+                lectureVideoPlayer.src = ''; // Clear video source
+            };
+
+            window.onclick = (event) => {
+                if (event.target == lectureDetailsModal) {
+                    lectureDetailsModal.style.display = 'none';
+                }
+                if (event.target == videoPlayerModal) {
+                    videoPlayerModal.style.display = 'none';
+                    lectureVideoPlayer.pause();
+                    lectureVideoPlayer.src = '';
+                }
+            };
+
+            async function fetchBatches() {
+                try {
+                    const response = await fetch('/batches.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const batches = await response.json();
+                    renderBatches(batches);
+                } catch (error) {
+                    batchesGrid.innerHTML = `<p class="error-message">Error loading batches: ${error.message}</p>`;
+                    console.error('Error fetching batches.json:', error);
+                }
+            }
+
+            function renderBatches(batches) {
+                batchesGrid.innerHTML = ''; // Clear loading message
+                batches.forEach(batch => {
+                    const batchCard = document.createElement('div');
+                    batchCard.className = 'card';
+                    batchCard.innerHTML = `
+                        <div class="card-header">${batch.batch_name}</div>
+                        <div class="card-body">
+                            <ul>
+                                ${batch.subjects.map(subject => `
+                                    <li>
+                                        <span>${subject.subject_name}</span>
+                                        <button data-uid="${subject.uid}" data-subject-name="${subject.subject_name}">View Lectures</button>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    batchesGrid.appendChild(batchCard);
+                });
+
+                // Add event listeners to "View Lectures" buttons
+                document.querySelectorAll('.card-body button').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const uid = event.target.dataset.uid;
+                        const subjectName = event.target.dataset.subjectName;
+                        showLectureDetails(uid, subjectName);
+                    });
+                });
+            }
+
+            async function showLectureDetails(uid, subjectName) {
+                modalSubjectTitle.textContent = subjectName;
+                lecturesList.innerHTML = '<p class="loading">Loading lectures...</p>';
+                lectureDetailsModal.style.display = 'flex'; // Use flex for centering
+
+                try {
+                    const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    const results = data.results || [];
+
+                    renderLectures(results, lecturesList);
+
+                } catch (error) {
+                    lecturesList.innerHTML = `<p class="error-message">Error fetching lectures for ${subjectName}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
+                    console.error('Error fetching lectures:', error);
+                }
+            }
+
+            function renderLectures(results, targetDiv) {
+                if (results.length === 0) {
+                    targetDiv.innerHTML = '<p>No lectures found for this subject.</p>';
+                    return;
+                }
+
+                targetDiv.innerHTML = ''; // Clear loading message
+
+                results.forEach(item => {
+                    const value = item.value || {};
+                    const title = (value.title || "No Title").trim();
+                    const liveClass = value.live_class || {};
+                    const author = liveClass.author || {};
+                    const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
+                    const createdAt = liveClass.created_at || "";
+                    const lectureDate = parseLectureDate(createdAt);
+
+                    let downloadableVideoLink = null;
+                    const videoUrl = liveClass.video_url || "";
+                    if (videoUrl.includes("uid=")) {
+                        try {
+                            const videoUid = videoUrl.split("uid=")[1].split("&")[0];
+                            downloadableVideoLink = `https://uamedia.uacdn.net/lesson-raw/${videoUid}/output.webm`;
+                        } catch (e) {
+                            console.warn(`Could not parse video UID from ${videoUrl}: ${e}`);
+                        }
+                    }
+
+                    const slidesPdf = liveClass.slides_pdf || {};
+                    const pdfLink = slidesPdf.with_annotation || null;
+
+                    const lectureItem = document.createElement('div');
+                    lectureItem.className = 'lecture-item';
+                    lectureItem.innerHTML = `
+                        <h3>${title}</h3>
+                        <div class="lecture-meta">
+                            <span><strong>Teacher:</strong> ${teacher}</span>
+                            <span><strong>Date:</strong> ${lectureDate}</span>
+                        </div>
+                        <div class="lecture-actions">
+                            ${downloadableVideoLink ? `<button class="watch-online" data-video-url="${downloadableVideoLink}">Watch Online</button>` : ''}
+                            ${downloadableVideoLink ? `<a href="${downloadableVideoLink}" download="${title}.webm">Download Video</a>` : ''}
+                            ${pdfLink ? `<a href="${pdfLink}" download="${title}.pdf" class="pdf-link">Download PDF</a>` : ''}
+                        </div>
+                    `;
+                    targetDiv.appendChild(lectureItem);
+                });
+
+                // Add event listeners for "Watch Online" buttons
+                document.querySelectorAll('.watch-online').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const videoUrl = event.target.dataset.videoUrl;
+                        lectureVideoPlayer.src = videoUrl;
+                        videoPlayerModal.style.display = 'flex';
+                        lectureVideoPlayer.play();
+                    });
+                });
+            }
+
+            fetchBatches();
+        });
+    </script>
+</body>
+</html>
