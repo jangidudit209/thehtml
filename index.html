@@ -372,50 +372,27 @@
 
     <script>
         // Utility functions
+        // THIS IS THE parseLectureDate FUNCTION FROM MultipleFiles/uc.html
         function parseLectureDate(dateString) {
-            if (!dateString || typeof dateString !== 'string' || dateString.trim() === '') {
-                console.warn("parseLectureDate: Received empty, null, or non-string dateString.");
-                return null;
-            }
-            
             try {
-                // Regex to parse ISO 8601 components (YYYY-MM-DDTHH:mm:ssZ)
-                const match = dateString.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/);
-                
-                if (!match) {
-                    console.warn(`parseLectureDate: Date string format mismatch: '${dateString}'.`);
-                    // Fallback to Date.parse if regex fails, though it's less reliable
-                    const fallbackTimestamp = Date.parse(dateString);
-                    if (!isNaN(fallbackTimestamp)) {
-                        const fallbackDate = new Date(fallbackTimestamp);
-                        const istOffsetMillis = (5 * 60 + 30) * 60 * 1000;
-                        return new Date(fallbackDate.getTime() + istOffsetMillis);
-                    }
-                    return null;
-                }
+                // The 'liveAt' field is typically in ISO 8601 format (e.g., "2025-07-30T10:05:00Z")
+                // Date constructor handles 'Z' (UTC) correctly.
+                const utcTime = new Date(dateString);
 
-                // Extract components and convert to numbers
-                const year = parseInt(match[1], 10);
-                const month = parseInt(match[2], 10) - 1; // Month is 0-indexed in JavaScript Date
-                const day = parseInt(match[3], 10);
-                const hour = parseInt(match[4], 10);
-                const minute = parseInt(match[5], 10);
-                const second = parseInt(match[6], 10);
-
-                // Create UTC date object
-                const utcTime = new Date(Date.UTC(year, month, day, hour, minute, second));
-
+                // Check if parsing resulted in an invalid date
                 if (isNaN(utcTime.getTime())) {
-                    console.warn(`parseLectureDate: Manually parsed components resulted in Invalid Date for '${dateString}'.`);
+                    console.warn(`Failed to parse date string: ${dateString}. Resulted in Invalid Date.`);
                     return null;
                 }
-                
+
                 // Convert UTC to IST (UTC + 5:30)
+                // getTime() returns milliseconds since epoch. Add milliseconds for 5 hours 30 minutes.
                 const istOffsetMillis = (5 * 60 + 30) * 60 * 1000;
                 const istTime = new Date(utcTime.getTime() + istOffsetMillis);
-                return istTime;
+                
+                return istTime; // Return Date object for sorting
             } catch (e) {
-                console.warn(`parseLectureDate: Error during manual parsing of '${dateString}': ${e}`);
+                console.warn(`Error parsing date ${dateString}: ${e}`);
                 return null;
             }
         }
