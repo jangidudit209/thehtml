@@ -373,16 +373,28 @@
     <script>
         // Utility functions
         function parseLectureDate(dateString) {
-            if (!dateString) {
-                console.warn("parseLectureDate: Received empty or null dateString.");
+            if (!dateString || typeof dateString !== 'string' || dateString.trim() === '') {
+                console.warn("parseLectureDate: Received empty, null, or non-string dateString.");
                 return null;
             }
+            
+            let utcTime;
             try {
-                const utcTime = new Date(dateString);
+                // Attempt parsing with Date.parse() first, which is often more robust for ISO strings
+                const timestamp = Date.parse(dateString);
+                if (!isNaN(timestamp)) {
+                    utcTime = new Date(timestamp);
+                } else {
+                    // Fallback to new Date() constructor if Date.parse() fails
+                    utcTime = new Date(dateString);
+                }
+
                 if (isNaN(utcTime.getTime())) {
                     console.warn(`parseLectureDate: Failed to parse date string: '${dateString}'. Resulted in Invalid Date.`);
                     return null;
                 }
+                
+                // Convert UTC to IST (UTC + 5:30)
                 const istOffsetMillis = (5 * 60 + 30) * 60 * 1000;
                 const istTime = new Date(utcTime.getTime() + istOffsetMillis);
                 return istTime;
