@@ -59,35 +59,44 @@
             text-align: center;
         }
 
-        /* Folder Structure - Grid Layout */
-        .folder-grid-container {
-            display: grid;
-            gap: 20px;
+        /* Navigation/Breadcrumbs */
+        .navigation {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: var(--secondary-color);
+        }
+        .navigation span {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .navigation span:hover {
+            text-decoration: underline;
+        }
+        .navigation .current {
+            color: var(--secondary-color);
+            cursor: default;
+            text-decoration: none;
+        }
+
+        /* Content Views */
+        .content-view {
+            display: none; /* Hidden by default */
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px var(--shadow-light);
             padding: 20px;
-            margin-bottom: 20px; /* Space below grid containers */
+        }
+        .content-view.active {
+            display: block; /* Show active view */
         }
 
-        /* Specific grid for batches (3 per line) */
-        #batches-container {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusted for 3 columns */
-            /* Max 3 columns, but responsive */
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        /* Folder Grid Layout */
+        .folder-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 3 columns on larger screens */
+            gap: 20px;
         }
-
-        /* Specific grid for subjects (3 per line) */
-        .subject-grid-container {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusted for 3 columns */
-            /* Max 3 columns, but responsive */
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            background-color: var(--bg-light); /* Lighter background for subjects within batch */
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.05); /* Inner shadow */
-        }
-
 
         .folder-item {
             background-color: var(--folder-bg);
@@ -101,7 +110,7 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            padding: 15px; /* Padding inside the square folder */
+            padding: 15px;
             aspect-ratio: 1 / 1; /* Make it square */
         }
 
@@ -111,7 +120,7 @@
         }
 
         .folder-item .folder-icon {
-            font-size: 3em; /* Larger icon */
+            font-size: 3em;
             color: var(--primary-color);
             margin-bottom: 10px;
         }
@@ -120,64 +129,12 @@
             font-size: 1.1em;
             font-weight: 600;
             color: var(--text-dark);
-            word-break: break-word; /* Allow long names to break */
-        }
-
-        /* Accordion-like display for subjects and lectures */
-        .batch-item-wrapper {
-            grid-column: 1 / -1; /* Span full width of the grid */
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px var(--shadow-light);
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .batch-header {
-            padding: 15px 20px;
-            font-size: 1.5em;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            border-radius: 10px 10px 0 0;
-            transition: background-color 0.3s ease;
-        }
-
-        .batch-header:hover {
-            background-color: #0056b3;
-        }
-
-        .batch-header .toggle-icon {
-            font-size: 1.5em;
-            transition: transform 0.3s ease;
-        }
-
-        .batch-header.active .toggle-icon {
-            transform: rotate(90deg);
-        }
-
-        .batch-content {
-            display: none; /* Hidden by default */
-            padding: 20px;
-            background-color: var(--bg-light);
-            border-radius: 0 0 10px 10px;
-        }
-
-        .batch-content.active {
-            display: block;
+            word-break: break-word;
         }
 
         /* Lecture List */
         .lecture-list-container {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px var(--shadow-light);
-            padding: 20px;
-            margin-top: 20px;
+            /* No specific grid for lectures, they stack */
         }
 
         .lecture-item {
@@ -266,7 +223,7 @@
         .video-player-modal {
             display: none;
             position: fixed;
-            z-index: 1001; /* Above lecture modal */
+            z-index: 1001;
             left: 0;
             top: 0;
             width: 100%;
@@ -277,7 +234,7 @@
             align-items: center;
         }
         .video-player-content {
-            background-color: #000; /* Black background for video */
+            background-color: #000;
             padding: 20px;
             border-radius: 10px;
             width: 90%;
@@ -343,7 +300,7 @@
             .section-title {
                 font-size: 1.8em;
             }
-            #batches-container, .subject-grid-container {
+            .folder-grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Smaller on mobile */
                 gap: 15px;
                 padding: 15px;
@@ -365,13 +322,6 @@
                 flex-direction: column;
                 gap: 8px;
             }
-            .batch-header {
-                font-size: 1.2em;
-                padding: 12px 15px;
-            }
-            .batch-content {
-                padding: 15px;
-            }
             .search-container {
                 padding: 10px;
             }
@@ -388,9 +338,27 @@
     </div>
 
     <div class="container">
-        <h2 class="section-title">Explore Batches</h2>
-        <div id="batches-container" class="folder-grid-container">
-            <p class="loading">Loading batches...</p>
+        <h2 class="section-title" id="current-view-title">Explore Batches</h2>
+        <div class="navigation" id="navigation-path">
+            <!-- Navigation path will be rendered here -->
+        </div>
+
+        <div id="batches-view" class="content-view active">
+            <div id="batches-grid" class="folder-grid-container">
+                <p class="loading">Loading batches...</p>
+            </div>
+        </div>
+
+        <div id="subjects-view" class="content-view">
+            <div id="subjects-grid" class="folder-grid-container">
+                <!-- Subjects will be loaded here -->
+            </div>
+        </div>
+
+        <div id="lectures-view" class="content-view">
+            <div id="lectures-list" class="lecture-list-container">
+                <!-- Lectures and search bar will be loaded here -->
+            </div>
         </div>
     </div>
 
@@ -407,15 +375,12 @@
         function parseLectureDate(dateString) {
             try {
                 const utcTime = new Date(dateString);
-
                 if (isNaN(utcTime.getTime())) {
                     console.warn(`Failed to parse date string: ${dateString}. Resulted in Invalid Date.`);
                     return null;
                 }
-
                 const istOffsetMillis = (5 * 60 + 30) * 60 * 1000;
                 const istTime = new Date(utcTime.getTime() + istOffsetMillis);
-                
                 return istTime;
             } catch (e) {
                 console.warn(`Error parsing date ${dateString}: ${e}`);
@@ -423,277 +388,287 @@
             }
         }
 
-        // Global store for lectures to enable search filtering without re-fetching
-        let currentLectures = [];
-        let currentLecturesTargetDiv = null; // To keep track of where lectures are displayed
+        // Global state variables
+        let allBatches = [];
+        let currentBatch = null;
+        let currentSubject = null;
+        let currentLectures = []; // Stores all lectures for the current subject
+        
+        // DOM elements
+        const batchesView = document.getElementById('batches-view');
+        const subjectsView = document.getElementById('subjects-view');
+        const lecturesView = document.getElementById('lectures-view');
+        const batchesGrid = document.getElementById('batches-grid');
+        const subjectsGrid = document.getElementById('subjects-grid');
+        const lecturesList = document.getElementById('lectures-list');
+        const currentViewTitle = document.getElementById('current-view-title');
+        const navigationPath = document.getElementById('navigation-path');
 
-        // Main application logic
-        document.addEventListener('DOMContentLoaded', async () => {
-            const batchesContainer = document.getElementById('batches-container');
-            const videoPlayerModal = document.getElementById('videoPlayerModal');
-            const closeVideoPlayerModal = document.getElementById('closeVideoPlayerModal');
-            const lectureVideoPlayer = document.getElementById('lectureVideoPlayer');
+        const videoPlayerModal = document.getElementById('videoPlayerModal');
+        const closeVideoPlayerModal = document.getElementById('closeVideoPlayerModal');
+        const lectureVideoPlayer = document.getElementById('lectureVideoPlayer');
 
-            // Fix: Close video player modal
-            closeVideoPlayerModal.onclick = () => {
+        // --- View Management ---
+        function showView(viewId) {
+            document.querySelectorAll('.content-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function updateNavigation() {
+            navigationPath.innerHTML = '';
+            let path = [];
+
+            const homeSpan = document.createElement('span');
+            homeSpan.textContent = 'Batches';
+            homeSpan.onclick = () => {
+                currentBatch = null;
+                currentSubject = null;
+                currentLectures = [];
+                updateNavigation();
+                currentViewTitle.textContent = 'Explore Batches';
+                showView('batches-view');
+            };
+            path.push(homeSpan);
+
+            if (currentBatch) {
+                const separator = document.createTextNode(' > ');
+                path.push(separator);
+                const batchSpan = document.createElement('span');
+                batchSpan.textContent = currentBatch.batch_name;
+                batchSpan.onclick = () => {
+                    currentSubject = null;
+                    currentLectures = [];
+                    updateNavigation();
+                    currentViewTitle.textContent = `Subjects in ${currentBatch.batch_name}`;
+                    renderSubjects(currentBatch.subjects);
+                    showView('subjects-view');
+                };
+                path.push(batchSpan);
+            }
+
+            if (currentSubject) {
+                const separator = document.createTextNode(' > ');
+                path.push(separator);
+                const subjectSpan = document.createElement('span');
+                subjectSpan.textContent = currentSubject.subject_name;
+                subjectSpan.classList.add('current'); // Mark as current, not clickable
+                path.push(subjectSpan);
+            }
+
+            path.forEach(node => navigationPath.appendChild(node));
+        }
+
+        // --- Event Listeners ---
+        closeVideoPlayerModal.onclick = () => {
+            videoPlayerModal.style.display = 'none';
+            lectureVideoPlayer.pause();
+            lectureVideoPlayer.src = '';
+        };
+
+        window.onclick = (event) => {
+            if (event.target == videoPlayerModal) {
                 videoPlayerModal.style.display = 'none';
                 lectureVideoPlayer.pause();
-                lectureVideoPlayer.src = ''; // Clear video source
-            };
-
-            // Fix: Close video player modal if clicked outside
-            window.onclick = (event) => {
-                if (event.target == videoPlayerModal) {
-                    videoPlayerModal.style.display = 'none';
-                    lectureVideoPlayer.pause();
-                    lectureVideoPlayer.src = '';
-                }
-            };
-
-            async function fetchBatches() {
-                try {
-                    const response = await fetch('/batches.json');
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const batches = await response.json();
-                    renderBatches(batches);
-                } catch (error) {
-                    batchesContainer.innerHTML = `<p class="error-message">Error loading batches: ${error.message}</p>`;
-                    console.error('Error fetching batches.json:', error);
-                }
+                lectureVideoPlayer.src = '';
             }
+        };
 
-            function renderBatches(batches) {
-                batchesContainer.innerHTML = ''; // Clear loading message
-                batches.forEach((batch, index) => {
-                    const batchWrapper = document.createElement('div');
-                    batchWrapper.className = 'batch-item-wrapper';
-                    batchWrapper.innerHTML = `
-                        <div class="batch-header" data-batch-index="${index}">
-                            <span>${batch.batch_name}</span>
-                            <span class="toggle-icon">&#9654;</span> <!-- Right arrow -->
-                        </div>
-                        <div class="batch-content" id="batch-content-${index}">
-                            <p class="loading">Loading subjects...</p>
-                        </div>
-                    `;
-                    batchesContainer.appendChild(batchWrapper);
-
-                    const batchHeader = batchWrapper.querySelector('.batch-header');
-                    const batchContent = batchWrapper.querySelector('.batch-content');
-
-                    batchHeader.addEventListener('click', () => {
-                        // Close other open batches
-                        document.querySelectorAll('.batch-header.active').forEach(header => {
-                            if (header !== batchHeader) {
-                                header.classList.remove('active');
-                                const content = document.getElementById(`batch-content-${header.dataset.batchIndex}`);
-                                if (content) content.classList.remove('active');
-                            }
-                        });
-
-                        batchHeader.classList.toggle('active');
-                        batchContent.classList.toggle('active');
-
-                        if (batchContent.classList.contains('active')) {
-                            // Load subjects only when batch is opened for the first time
-                            if (batchContent.querySelector('.loading')) {
-                                renderSubjects(batch.subjects, batchContent);
-                            }
-                        }
-                    });
-                });
-            }
-
-            function renderSubjects(subjects, targetDiv) {
-                targetDiv.innerHTML = ''; // Clear loading message
-                if (subjects.length === 0) {
-                    targetDiv.innerHTML = '<p>No subjects found for this batch.</p>';
-                    return;
+        // --- Data Fetching & Rendering ---
+        async function fetchBatches() {
+            try {
+                const response = await fetch('/batches.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
-                const subjectGrid = document.createElement('div');
-                subjectGrid.className = 'subject-grid-container';
-                targetDiv.appendChild(subjectGrid);
-
-                subjects.forEach((subject, index) => {
-                    const subjectItem = document.createElement('div');
-                    subjectItem.className = 'folder-item subject-item';
-                    subjectItem.innerHTML = `
-                        <div class="folder-icon">&#128218;</div> <!-- Book icon -->
-                        <div class="folder-name">${subject.subject_name}</div>
-                    `;
-                    subjectGrid.appendChild(subjectItem);
-
-                    subjectItem.addEventListener('click', () => {
-                        // Close other open subject lecture lists
-                        document.querySelectorAll('.lecture-list-container.active').forEach(list => {
-                            list.classList.remove('active');
-                        });
-
-                        // Create or get lecture container for this subject
-                        let lectureContainer = targetDiv.querySelector(`#lectures-for-${subject.uid}`);
-                        if (!lectureContainer) {
-                            lectureContainer = document.createElement('div');
-                            lectureContainer.id = `lectures-for-${subject.uid}`;
-                            lectureContainer.className = 'lecture-list-container';
-                            targetDiv.appendChild(lectureContainer);
-                        }
-                        
-                        // Toggle active state
-                        lectureContainer.classList.toggle('active');
-
-                        if (lectureContainer.classList.contains('active')) {
-                            // Load lectures only when subject is opened for the first time or re-opened
-                            fetchLectures(subject.uid, lectureContainer);
-                        } else {
-                            lectureContainer.innerHTML = ''; // Clear content when closing
-                        }
-                    });
-                });
+                allBatches = await response.json();
+                renderBatches(allBatches);
+            } catch (error) {
+                batchesGrid.innerHTML = `<p class="error-message">Error loading batches: ${error.message}</p>`;
+                console.error('Error fetching batches.json:', error);
             }
+        }
 
-            async function fetchLectures(uid, targetDiv) {
-                targetDiv.innerHTML = '<p class="loading">Fetching lectures for UID: ' + uid + '...</p>';
-                try {
-                    const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    const results = data.results || [];
-
-                    // Store raw processed lectures globally for search
-                    currentLectures = processLectures(results);
-                    currentLecturesTargetDiv = targetDiv; // Store target div
-
-                    renderFilteredLectures(currentLectures, targetDiv);
-
-                } catch (error) {
-                    targetDiv.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
-                    console.error('Error fetching lectures:', error);
-                }
-            }
-
-            function processLectures(results) {
-                if (results.length === 0) {
-                    return [];
-                }
-
-                return results.map(item => {
-                    const value = item.value || {};
-                    const title = (value.title || "No Title").trim();
-                    const liveClass = value.live_class || {};
-                    const author = liveClass.author || {};
-                    const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
-                    
-                    const liveAt = liveClass.liveAt || ""; 
-                    const lectureDateObj = parseLectureDate(liveAt);
-                    
-                    const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
-
-                    let downloadableVideoLink = null;
-                    const videoUrl = liveClass.video_url || "";
-                    if (videoUrl.includes("uid=")) {
-                        try {
-                            const videoUid = videoUrl.split("uid=")[1].split("&")[0];
-                            downloadableVideoLink = `https://uamedia.uacdn.net/lesson-raw/${videoUid}/output.webm`;
-                        } catch (e) {
-                            console.warn(`Could not parse video UID from ${videoUrl}: ${e}`);
-                        }
-                    }
-
-                    const slidesPdf = liveClass.slides_pdf || {};
-                    const pdfLink = slidesPdf.with_annotation || null;
-
-                    return {
-                        title,
-                        teacher,
-                        dateObj: lectureDateObj, // For sorting
-                        dateStr: lectureDateStr, // For display
-                        video_url: downloadableVideoLink,
-                        pdf_url: pdfLink
-                    };
-                }).sort((a, b) => { // Sort here once after processing
-                    if (!a.dateObj && !b.dateObj) return 0;
-                    if (!a.dateObj) return 1;
-                    if (!b.dateObj) return -1;
-                    return b.dateObj.getTime() - a.dateObj.getTime(); // Newest first
-                });
-            }
-
-            function renderFilteredLectures(lecturesToRender, targetDiv) {
-                targetDiv.innerHTML = ''; // Clear previous content
-
-                // Add search bar
-                const searchContainer = document.createElement('div');
-                searchContainer.className = 'search-container';
-                searchContainer.innerHTML = `
-                    <span class="search-icon">&#128269;</span> <!-- Magnifying glass icon -->
-                    <input type="text" id="lectureSearchInput" placeholder="Search lectures by topic...">
+        function renderBatches(batches) {
+            batchesGrid.innerHTML = '';
+            batches.forEach((batch) => {
+                const batchItem = document.createElement('div');
+                batchItem.className = 'folder-item';
+                batchItem.innerHTML = `
+                    <div class="folder-icon">&#128447;</div>
+                    <div class="folder-name">${batch.batch_name}</div>
                 `;
-                targetDiv.appendChild(searchContainer);
+                batchesGrid.appendChild(batchItem);
 
-                const lectureSearchInput = searchContainer.querySelector('#lectureSearchInput');
-                lectureSearchInput.addEventListener('input', (event) => {
-                    const searchTerm = event.target.value.toLowerCase();
-                    const filtered = currentLectures.filter(lecture => 
-                        lecture.title.toLowerCase().includes(searchTerm)
-                    );
-                    displayLectures(filtered, targetDiv);
+                batchItem.addEventListener('click', () => {
+                    currentBatch = batch;
+                    currentViewTitle.textContent = `Subjects in ${batch.batch_name}`;
+                    updateNavigation();
+                    renderSubjects(batch.subjects);
+                    showView('subjects-view');
                 });
+            });
+        }
 
-                // Initial display of all lectures
-                displayLectures(lecturesToRender, targetDiv);
+        function renderSubjects(subjects) {
+            subjectsGrid.innerHTML = '';
+            if (subjects.length === 0) {
+                subjectsGrid.innerHTML = '<p>No subjects found for this batch.</p>';
+                return;
             }
+            subjects.forEach((subject) => {
+                const subjectItem = document.createElement('div');
+                subjectItem.className = 'folder-item';
+                subjectItem.innerHTML = `
+                    <div class="folder-icon">&#128218;</div>
+                    <div class="folder-name">${subject.subject_name}</div>
+                `;
+                subjectsGrid.appendChild(subjectItem);
 
-            function displayLectures(lectures, targetDiv) {
-                // Remove existing lecture items (but keep search bar)
-                targetDiv.querySelectorAll('.lecture-item').forEach(item => item.remove());
-                targetDiv.querySelectorAll('.no-lectures-found').forEach(item => item.remove());
+                subjectItem.addEventListener('click', () => {
+                    currentSubject = subject;
+                    currentViewTitle.textContent = `Lectures for ${subject.subject_name}`;
+                    updateNavigation();
+                    fetchLectures(subject.uid);
+                    showView('lectures-view');
+                });
+            });
+        }
 
-
-                if (lectures.length === 0) {
-                    const noLecturesMsg = document.createElement('p');
-                    noLecturesMsg.className = 'no-lectures-found';
-                    noLecturesMsg.textContent = 'No lectures found matching your search.';
-                    targetDiv.appendChild(noLecturesMsg);
-                    return;
+        async function fetchLectures(uid) {
+            lecturesList.innerHTML = '<p class="loading">Fetching lectures for UID: ' + uid + '...</p>';
+            try {
+                const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                const data = await response.json();
+                const results = data.results || [];
 
-                lectures.forEach(lecture => {
-                    const lectureItem = document.createElement('div');
-                    lectureItem.className = 'lecture-item';
-                    lectureItem.innerHTML = `
-                        <h3>${lecture.title}</h3>
-                        <div class="lecture-meta">
-                            <span><strong>Teacher:</strong> ${lecture.teacher}</span>
-                            <span><strong>Date:</strong> ${lecture.dateStr}</span>
-                        </div>
-                        <div class="lecture-actions">
-                            ${lecture.video_url ? `<button class="watch-online" data-video-url="${lecture.video_url}">Watch Online</button>` : ''}
-                            ${lecture.video_url ? `<a href="${lecture.video_url}" download="${lecture.title}.webm">Download Video</a>` : ''}
-                            ${lecture.pdf_url ? `<a href="${lecture.pdf_url}" download="${lecture.title}.pdf" class="pdf-link">Download PDF</a>` : ''}
-                        </div>
-                    `;
-                    targetDiv.appendChild(lectureItem);
-                });
+                currentLectures = processLectures(results);
+                renderLecturesWithSearch(currentLectures);
 
-                // Add event listeners for "Watch Online" buttons to newly added lectures
-                targetDiv.querySelectorAll('.watch-online').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const videoUrl = event.target.dataset.videoUrl;
-                        lectureVideoPlayer.src = videoUrl;
-                        videoPlayerModal.style.display = 'flex';
-                        lectureVideoPlayer.play();
-                    });
-                });
+            } catch (error) {
+                lecturesList.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
+                console.error('Error fetching lectures:', error);
+            }
+        }
+
+        function processLectures(results) {
+            if (results.length === 0) {
+                return [];
+            }
+            return results.map(item => {
+                const value = item.value || {};
+                const title = (value.title || "No Title").trim();
+                const liveClass = value.live_class || {};
+                const author = liveClass.author || {};
+                const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
+                const liveAt = liveClass.liveAt || ""; 
+                const lectureDateObj = parseLectureDate(liveAt);
+                const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
+
+                let downloadableVideoLink = null;
+                const videoUrl = liveClass.video_url || "";
+                if (videoUrl.includes("uid=")) {
+                    try {
+                        const videoUid = videoUrl.split("uid=")[1].split("&")[0];
+                        downloadableVideoLink = `https://uamedia.uacdn.net/lesson-raw/${videoUid}/output.webm`;
+                    } catch (e) {
+                        console.warn(`Could not parse video UID from ${videoUrl}: ${e}`);
+                    }
+                }
+                const slidesPdf = liveClass.slides_pdf || {};
+                const pdfLink = slidesPdf.with_annotation || null;
+
+                return {
+                    title,
+                    teacher,
+                    dateObj: lectureDateObj,
+                    dateStr: lectureDateStr,
+                    video_url: downloadableVideoLink,
+                    pdf_url: pdfLink
+                };
+            }).sort((a, b) => {
+                if (!a.dateObj && !b.dateObj) return 0;
+                if (!a.dateObj) return 1;
+                if (!b.dateObj) return -1;
+                return b.dateObj.getTime() - a.dateObj.getTime();
+            });
+        }
+
+        function renderLecturesWithSearch(lecturesToDisplay) {
+            lecturesList.innerHTML = ''; // Clear previous content
+
+            // Add search bar
+            const searchContainer = document.createElement('div');
+            searchContainer.className = 'search-container';
+            searchContainer.innerHTML = `
+                <span class="search-icon">&#128269;</span>
+                <input type="text" id="lectureSearchInput" placeholder="Search lectures by topic...">
+            `;
+            lecturesList.appendChild(searchContainer);
+
+            const lectureSearchInput = searchContainer.querySelector('#lectureSearchInput');
+            lectureSearchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                const filtered = currentLectures.filter(lecture => 
+                    lecture.title.toLowerCase().includes(searchTerm)
+                );
+                displayLectureItems(filtered);
+            });
+
+            // Initial display of all lectures
+            displayLectureItems(lecturesToDisplay);
+        }
+
+        function displayLectureItems(lectures) {
+            // Remove existing lecture items (but keep search bar)
+            lecturesList.querySelectorAll('.lecture-item').forEach(item => item.remove());
+            lecturesList.querySelectorAll('.no-lectures-found').forEach(item => item.remove());
+
+            if (lectures.length === 0) {
+                const noLecturesMsg = document.createElement('p');
+                noLecturesMsg.className = 'no-lectures-found';
+                noLecturesMsg.textContent = 'No lectures found matching your search.';
+                lecturesList.appendChild(noLecturesMsg);
+                return;
             }
 
-            fetchBatches();
-        });
+            lectures.forEach(lecture => {
+                const lectureItem = document.createElement('div');
+                lectureItem.className = 'lecture-item';
+                lectureItem.innerHTML = `
+                    <h3>${lecture.title}</h3>
+                    <div class="lecture-meta">
+                        <span><strong>Teacher:</strong> ${lecture.teacher}</span>
+                        <span><strong>Date:</strong> ${lecture.dateStr}</span>
+                    </div>
+                    <div class="lecture-actions">
+                        ${lecture.video_url ? `<button class="watch-online" data-video-url="${lecture.video_url}">Watch Online</button>` : ''}
+                        ${lecture.video_url ? `<a href="${lecture.video_url}" download="${lecture.title}.webm">Download Video</a>` : ''}
+                        ${lecture.pdf_url ? `<a href="${lecture.pdf_url}" download="${lecture.title}.pdf" class="pdf-link">Download PDF</a>` : ''}
+                    </div>
+                `;
+                lecturesList.appendChild(lectureItem);
+            });
+
+            // Add event listeners for "Watch Online" buttons to newly added lectures
+            lecturesList.querySelectorAll('.watch-online').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const videoUrl = event.target.dataset.videoUrl;
+                    lectureVideoPlayer.src = videoUrl;
+                    videoPlayerModal.style.display = 'flex';
+                    lectureVideoPlayer.play();
+                });
+            });
+        }
+
+        // Initial load
+        fetchBatches();
+        updateNavigation(); // Initialize navigation
     </script>
 </body>
 </html>
