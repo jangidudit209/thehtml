@@ -586,6 +586,11 @@
                 const author = liveClass.author || {};
                 const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
                 const liveAt = liveClass.liveAt || ""; 
+                
+                // --- ADDED CONSOLE LOG FOR DEBUGGING liveAt VALUE ---
+                console.log(`Processing lecture "${title}": raw liveAt = '${liveAt}'`);
+                // --- END ADDITION ---
+
                 const lectureDateObj = parseLectureDate(liveAt); // Call the function
                 
                 // Ensure date is formatted even if parseLectureDate returns null
