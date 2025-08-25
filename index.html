@@ -373,17 +373,21 @@
     <script>
         // Utility functions
         function parseLectureDate(dateString) {
+            if (!dateString) {
+                console.warn("parseLectureDate: Received empty or null dateString.");
+                return null;
+            }
             try {
                 const utcTime = new Date(dateString);
                 if (isNaN(utcTime.getTime())) {
-                    console.warn(`Failed to parse date string: ${dateString}. Resulted in Invalid Date.`);
+                    console.warn(`parseLectureDate: Failed to parse date string: '${dateString}'. Resulted in Invalid Date.`);
                     return null;
                 }
                 const istOffsetMillis = (5 * 60 + 30) * 60 * 1000;
                 const istTime = new Date(utcTime.getTime() + istOffsetMillis);
                 return istTime;
             } catch (e) {
-                console.warn(`Error parsing date ${dateString}: ${e}`);
+                console.warn(`parseLectureDate: Error processing date '${dateString}': ${e}`);
                 return null;
             }
         }
@@ -568,6 +572,7 @@
                 const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
                 const liveAt = liveClass.liveAt || ""; 
                 const lectureDateObj = parseLectureDate(liveAt);
+                // Ensure date is formatted even if parseLectureDate returns null
                 const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
 
                 let downloadableVideoLink = null;
@@ -592,8 +597,9 @@
                     pdf_url: pdfLink
                 };
             }).sort((a, b) => {
+                // Handle null dateObj for sorting
                 if (!a.dateObj && !b.dateObj) return 0;
-                if (!a.dateObj) return 1;
+                if (!a.dateObj) return 1; // Null dates go to the end
                 if (!b.dateObj) return -1;
                 return b.dateObj.getTime() - a.dateObj.getTime();
             });
@@ -620,12 +626,10 @@
                 displayLectureItems(filtered);
             });
 
-            // *** FIX: Call displayLectureItems here to show initial lectures ***
             displayLectureItems(lecturesToDisplay); 
         }
 
         function displayLectureItems(lectures) {
-            // Find the container for lecture items, which is everything after the search bar
             let actualLectureItemsContainer = lecturesList.querySelector('#actual-lecture-items');
             if (!actualLectureItemsContainer) {
                 actualLectureItemsContainer = document.createElement('div');
@@ -647,7 +651,7 @@
                         <h3>${lecture.title}</h3>
                         <div class="lecture-meta">
                             <span><strong>Teacher:</strong> ${lecture.teacher}</span>
-                            <span><strong>Date:</strong> ${lecture.dateStr}</span> <!-- FIX: Ensure dateStr is used here -->
+                            <span><strong>Date:</strong> ${lecture.dateStr}</span>
                         </div>
                         <div class="lecture-actions">
                             ${lecture.video_url ? `<button class="watch-online" data-video-url="${lecture.video_url}">Watch Online</button>` : ''}
@@ -659,7 +663,6 @@
                 });
             }
             
-            // Add event listeners for "Watch Online" buttons to newly added lectures
             actualLectureItemsContainer.querySelectorAll('.watch-online').forEach(button => {
                 button.addEventListener('click', (event) => {
                     const videoUrl = event.target.dataset.videoUrl;
