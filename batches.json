@@ -1,0 +1,41 @@
+[
+  {
+    "batch_name": "Bikaner NEET UG 2027 Growth 2",
+    "subjects": [
+      {
+        "subject_name": "Physics",
+        "uid": "SOUQ71B9"
+      },
+      {
+        "subject_name": "Chemistry",
+        "uid": "NFI5HJPI"
+      }
+    ]
+  },
+  {
+    "batch_name": "Batch B - Advanced",
+    "subjects": [
+      {
+        "subject_name": "Biology",
+        "uid": "BIO123ABC"
+      },
+      {
+        "subject_name": "Mathematics",
+        "uid": "MATH456XYZ"
+      }
+    ]
+  },
+  {
+    "batch_name": "Batch C - Crash Course",
+    "subjects": [
+      {
+        "subject_name": "History",
+        "uid": "HIST789DEF"
+      },
+      {
+        "subject_name": "Geography",
+        "uid": "GEO101GHI"
+      }
+    ]
+  }
+]
