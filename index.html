@@ -59,43 +59,15 @@
             text-align: center;
         }
 
-        /* Navigation/Breadcrumbs */
-        .navigation {
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            color: var(--secondary-color);
-        }
-        .navigation span {
-            cursor: pointer;
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-        .navigation span:hover {
-            text-decoration: underline;
-        }
-        .navigation .current {
-            color: var(--secondary-color);
-            cursor: default;
-            text-decoration: none;
-        }
-
-        /* Content Views */
-        .content-view {
-            display: none; /* Hidden by default */
+        /* Folder Structure - Grid Layout */
+        .folder-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Adjusted for medium square size */
+            gap: 20px;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px var(--shadow-light);
             padding: 20px;
-        }
-        .content-view.active {
-            display: block; /* Show active view */
-        }
-
-        /* Folder Grid Layout */
-        .folder-grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 3 columns on larger screens */
-            gap: 20px;
         }
 
         .folder-item {
@@ -110,7 +82,7 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            padding: 15px;
+            padding: 15px; /* Padding inside the square folder */
             aspect-ratio: 1 / 1; /* Make it square */
         }
 
@@ -120,7 +92,7 @@
         }
 
         .folder-item .folder-icon {
-            font-size: 3em;
+            font-size: 3em; /* Larger icon */
             color: var(--primary-color);
             margin-bottom: 10px;
         }
@@ -129,12 +101,21 @@
             font-size: 1.1em;
             font-weight: 600;
             color: var(--text-dark);
-            word-break: break-word;
+            word-break: break-word; /* Allow long names to break */
         }
 
-        /* Lecture List */
+        /* Specific styling for batch and subject items in grid */
+        .batch-item, .subject-item {
+            /* Inherits from .folder-item */
+        }
+
+        /* Lecture List (inside subject content) */
         .lecture-list-container {
-            /* No specific grid for lectures, they stack */
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--shadow-light);
+            padding: 20px;
+            margin-top: 20px; /* Space between grid and lecture list */
         }
 
         .lecture-item {
@@ -223,7 +204,7 @@
         .video-player-modal {
             display: none;
             position: fixed;
-            z-index: 1001;
+            z-index: 1001; /* Above lecture modal */
             left: 0;
             top: 0;
             width: 100%;
@@ -234,7 +215,7 @@
             align-items: center;
         }
         .video-player-content {
-            background-color: #000;
+            background-color: #000; /* Black background for video */
             padding: 20px;
             border-radius: 10px;
             width: 90%;
@@ -259,38 +240,61 @@
             margin: 0 auto;
         }
 
-        /* Search Bar Styling */
-        .search-container {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: var(--bg-light);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            display: flex;
+        /* Modal for Subjects and Lectures */
+        .content-modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
             align-items: center;
-            gap: 10px;
         }
 
-        .search-container input[type="text"] {
-            flex-grow: 1;
-            padding: 10px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 1em;
-            outline: none;
-            transition: border-color 0.3s ease;
+        .content-modal-content {
+            background-color: var(--bg-light);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 900px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            animation-name: animatetop;
+            animation-duration: 0.4s
         }
 
-        .search-container input[type="text"]:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        /* Add Animation */
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
         }
 
-        .search-container .search-icon {
-            color: var(--secondary-color);
-            font-size: 1.2em;
+        .content-modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
         }
 
+        .content-modal-close:hover,
+        .content-modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .content-modal-title {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
@@ -322,11 +326,9 @@
                 flex-direction: column;
                 gap: 8px;
             }
-            .search-container {
-                padding: 10px;
-            }
-            .search-container input[type="text"] {
-                padding: 8px 12px;
+            .content-modal-content {
+                width: 95%;
+                padding: 15px;
             }
         }
     </style>
@@ -338,26 +340,30 @@
     </div>
 
     <div class="container">
-        <h2 class="section-title" id="current-view-title">Explore Batches</h2>
-        <div class="navigation" id="navigation-path">
-            <!-- Navigation path will be rendered here -->
+        <h2 class="section-title">Explore Batches</h2>
+        <div id="batches-container" class="folder-grid-container">
+            <p class="loading">Loading batches...</p>
         </div>
+    </div>
 
-        <div id="batches-view" class="content-view active">
-            <div id="batches-grid" class="folder-grid-container">
-                <p class="loading">Loading batches...</p>
-            </div>
-        </div>
-
-        <div id="subjects-view" class="content-view">
-            <div id="subjects-grid" class="folder-grid-container">
+    <!-- Modal for Subjects -->
+    <div id="subjectsModal" class="content-modal">
+        <div class="content-modal-content">
+            <span class="content-modal-close" id="closeSubjectsModal">&times;</span>
+            <h2 class="content-modal-title" id="subjectsModalTitle"></h2>
+            <div id="subjects-container-modal" class="folder-grid-container">
                 <!-- Subjects will be loaded here -->
             </div>
         </div>
+    </div>
 
-        <div id="lectures-view" class="content-view">
-            <div id="lectures-list" class="lecture-list-container">
-                <!-- Lectures and search bar will be loaded here -->
+    <!-- Modal for Lectures -->
+    <div id="lecturesModal" class="content-modal">
+        <div class="content-modal-content">
+            <span class="content-modal-close" id="closeLecturesModal">&times;</span>
+            <h2 class="content-modal-title" id="lecturesModalTitle"></h2>
+            <div id="lectures-container-modal" class="lecture-list-container">
+                <!-- Lectures will be loaded here -->
             </div>
         </div>
     </div>
@@ -372,19 +378,15 @@
 
     <script>
         // Utility functions
-        // THIS IS THE parseLectureDate FUNCTION FROM MultipleFiles/uc.html
-        // ADDED CONSOLE LOGS FOR DEBUGGING
         function parseLectureDate(dateString) {
-            console.log(`parseLectureDate: Attempting to parse: '${dateString}'`);
             try {
                 // The 'liveAt' field is typically in ISO 8601 format (e.g., "2025-07-30T10:05:00Z")
                 // Date constructor handles 'Z' (UTC) correctly.
                 const utcTime = new Date(dateString);
-                console.log(`parseLectureDate: new Date() result (UTC):`, utcTime);
 
                 // Check if parsing resulted in an invalid date
                 if (isNaN(utcTime.getTime())) {
-                    console.warn(`parseLectureDate: Failed to parse date string: '${dateString}'. Resulted in Invalid Date.`);
+                    console.warn(`Failed to parse date string: ${dateString}. Resulted in Invalid Date.`);
                     return null;
                 }
 
@@ -392,269 +394,198 @@
                 // getTime() returns milliseconds since epoch. Add milliseconds for 5 hours 30 minutes.
                 const istOffsetMillis = (5 * 60 + 30) * 60 * 1000;
                 const istTime = new Date(utcTime.getTime() + istOffsetMillis);
-                console.log(`parseLectureDate: IST Time:`, istTime);
                 
                 return istTime; // Return Date object for sorting
             } catch (e) {
-                console.error(`parseLectureDate: Critical error during parsing of '${dateString}':`, e);
+                console.warn(`Error parsing date ${dateString}: ${e}`);
                 return null;
             }
         }
 
-        // Global state variables
-        let allBatches = [];
-        let currentBatch = null;
-        let currentSubject = null;
-        let currentLectures = []; // Stores all lectures for the current subject
-        
-        // DOM elements
-        const batchesView = document.getElementById('batches-view');
-        const subjectsView = document.getElementById('subjects-view');
-        const lecturesView = document.getElementById('lectures-view');
-        const batchesGrid = document.getElementById('batches-grid');
-        const subjectsGrid = document.getElementById('subjects-grid');
-        const lecturesList = document.getElementById('lectures-list');
-        const currentViewTitle = document.getElementById('current-view-title');
-        const navigationPath = document.getElementById('navigation-path');
+        // Main application logic
+        document.addEventListener('DOMContentLoaded', async () => {
+            const batchesContainer = document.getElementById('batches-container');
+            const subjectsModal = document.getElementById('subjectsModal');
+            const closeSubjectsModal = document.getElementById('closeSubjectsModal');
+            const subjectsModalTitle = document.getElementById('subjectsModalTitle');
+            const subjectsContainerModal = document.getElementById('subjects-container-modal');
 
-        const videoPlayerModal = document.getElementById('videoPlayerModal');
-        const closeVideoPlayerModal = document.getElementById('closeVideoPlayerModal');
-        const lectureVideoPlayer = document.getElementById('lectureVideoPlayer');
+            const lecturesModal = document.getElementById('lecturesModal');
+            const closeLecturesModal = document.getElementById('closeLecturesModal');
+            const lecturesModalTitle = document.getElementById('lecturesModalTitle');
+            const lecturesContainerModal = document.getElementById('lectures-container-modal');
 
-        // --- View Management ---
-        function showView(viewId) {
-            document.querySelectorAll('.content-view').forEach(view => {
-                view.classList.remove('active');
-            });
-            document.getElementById(viewId).classList.add('active');
-        }
+            const videoPlayerModal = document.getElementById('videoPlayerModal');
+            const closeVideoPlayerModal = document.getElementById('closeVideoPlayerModal');
+            const lectureVideoPlayer = document.getElementById('lectureVideoPlayer');
 
-        function updateNavigation() {
-            navigationPath.innerHTML = '';
-            let path = [];
-
-            const homeSpan = document.createElement('span');
-            homeSpan.textContent = 'Batches';
-            homeSpan.onclick = () => {
-                currentBatch = null;
-                currentSubject = null;
-                currentLectures = [];
-                updateNavigation();
-                currentViewTitle.textContent = 'Explore Batches';
-                showView('batches-view');
-            };
-            path.push(homeSpan);
-
-            if (currentBatch) {
-                const separator = document.createTextNode(' > ');
-                path.push(separator);
-                const batchSpan = document.createElement('span');
-                batchSpan.textContent = currentBatch.batch_name;
-                batchSpan.onclick = () => {
-                    currentSubject = null;
-                    currentLectures = [];
-                    updateNavigation();
-                    currentViewTitle.textContent = `Subjects in ${currentBatch.batch_name}`;
-                    renderSubjects(currentBatch.subjects);
-                    showView('subjects-view');
-                };
-                path.push(batchSpan);
-            }
-
-            if (currentSubject) {
-                const separator = document.createTextNode(' > ');
-                path.push(separator);
-                const subjectSpan = document.createElement('span');
-                subjectSpan.textContent = currentSubject.subject_name;
-                subjectSpan.classList.add('current'); // Mark as current, not clickable
-                path.push(subjectSpan);
-            }
-
-            path.forEach(node => navigationPath.appendChild(node));
-        }
-
-        // --- Event Listeners ---
-        closeVideoPlayerModal.onclick = () => {
-            videoPlayerModal.style.display = 'none';
-            lectureVideoPlayer.pause();
-            lectureVideoPlayer.src = '';
-        };
-
-        window.onclick = (event) => {
-            if (event.target == videoPlayerModal) {
+            // Close video player modal
+            closeVideoPlayerModal.onclick = () => {
                 videoPlayerModal.style.display = 'none';
                 lectureVideoPlayer.pause();
-                lectureVideoPlayer.src = '';
-            }
-        };
+                lectureVideoPlayer.src = ''; // Clear video source
+            };
 
-        // --- Data Fetching & Rendering ---
-        async function fetchBatches() {
-            try {
-                const response = await fetch('/batches.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+            // Close subjects modal
+            closeSubjectsModal.onclick = () => {
+                subjectsModal.style.display = 'none';
+                subjectsContainerModal.innerHTML = ''; // Clear content
+            };
+
+            // Close lectures modal
+            closeLecturesModal.onclick = () => {
+                lecturesModal.style.display = 'none';
+                lecturesContainerModal.innerHTML = ''; // Clear content
+            };
+
+            // Close modals if clicked outside
+            window.onclick = (event) => {
+                if (event.target == videoPlayerModal) {
+                    videoPlayerModal.style.display = 'none';
+                    lectureVideoPlayer.pause();
+                    lectureVideoPlayer.src = '';
                 }
-                allBatches = await response.json();
-                renderBatches(allBatches);
-            } catch (error) {
-                batchesGrid.innerHTML = `<p class="error-message">Error loading batches: ${error.message}</p>`;
-                console.error('Error fetching batches.json:', error);
-            }
-        }
-
-        function renderBatches(batches) {
-            batchesGrid.innerHTML = '';
-            batches.forEach((batch) => {
-                const batchItem = document.createElement('div');
-                batchItem.className = 'folder-item';
-                batchItem.innerHTML = `
-                    <div class="folder-icon">&#128447;</div>
-                    <div class="folder-name">${batch.batch_name}</div>
-                `;
-                batchesGrid.appendChild(batchItem);
-
-                batchItem.addEventListener('click', () => {
-                    currentBatch = batch;
-                    currentViewTitle.textContent = `Subjects in ${batch.batch_name}`;
-                    updateNavigation();
-                    renderSubjects(batch.subjects);
-                    showView('subjects-view');
-                });
-            });
-        }
-
-        function renderSubjects(subjects) {
-            subjectsGrid.innerHTML = '';
-            if (subjects.length === 0) {
-                subjectsGrid.innerHTML = '<p>No subjects found for this batch.</p>';
-                return;
-            }
-            subjects.forEach((subject) => {
-                const subjectItem = document.createElement('div');
-                subjectItem.className = 'folder-item';
-                subjectItem.innerHTML = `
-                    <div class="folder-icon">&#128218;</div>
-                    <div class="folder-name">${subject.subject_name}</div>
-                `;
-                subjectsGrid.appendChild(subjectItem);
-
-                subjectItem.addEventListener('click', () => {
-                    currentSubject = subject;
-                    currentViewTitle.textContent = `Lectures for ${subject.subject_name}`;
-                    updateNavigation();
-                    fetchLectures(subject.uid);
-                    showView('lectures-view');
-                });
-            });
-        }
-
-        async function fetchLectures(uid) {
-            lecturesList.innerHTML = '<p class="loading">Fetching lectures for UID: ' + uid + '...</p>';
-            try {
-                const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (event.target == subjectsModal) {
+                    subjectsModal.style.display = 'none';
+                    subjectsContainerModal.innerHTML = '';
                 }
-                const data = await response.json();
-                const results = data.results || [];
+                if (event.target == lecturesModal) {
+                    lecturesModal.style.display = 'none';
+                    lecturesContainerModal.innerHTML = '';
+                }
+            };
 
-                currentLectures = processLectures(results);
-                renderLecturesWithSearch(currentLectures);
-
-            } catch (error) {
-                lecturesList.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
-                console.error('Error fetching lectures:', error);
-            }
-        }
-
-        function processLectures(results) {
-            if (results.length === 0) {
-                return [];
-            }
-            return results.map(item => {
-                const value = item.value || {};
-                const title = (value.title || "No Title").trim();
-                const liveClass = value.live_class || {};
-                const author = liveClass.author || {};
-                const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
-                const liveAt = liveClass.liveAt || ""; 
-                const lectureDateObj = parseLectureDate(liveAt); // Call the function
-                
-                // Ensure date is formatted even if parseLectureDate returns null
-                const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
-
-                let downloadableVideoLink = null;
-                const videoUrl = liveClass.video_url || "";
-                if (videoUrl.includes("uid=")) {
-                    try {
-                        const videoUid = videoUrl.split("uid=")[1].split("&")[0];
-                        downloadableVideoLink = `https://uamedia.uacdn.net/lesson-raw/${videoUid}/output.webm`;
-                    } catch (e) {
-                        console.warn(`Could not parse video UID from ${videoUrl}: ${e}`);
+            async function fetchBatches() {
+                try {
+                    const response = await fetch('/batches.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
+                    const batches = await response.json();
+                    renderBatches(batches);
+                } catch (error) {
+                    batchesContainer.innerHTML = `<p class="error-message">Error loading batches: ${error.message}</p>`;
+                    console.error('Error fetching batches.json:', error);
                 }
-                const slidesPdf = liveClass.slides_pdf || {};
-                const pdfLink = slidesPdf.with_annotation || null;
-
-                return {
-                    title,
-                    teacher,
-                    dateObj: lectureDateObj,
-                    dateStr: lectureDateStr,
-                    video_url: downloadableVideoLink,
-                    pdf_url: pdfLink
-                };
-            }).sort((a, b) => {
-                // Handle null dateObj for sorting
-                if (!a.dateObj && !b.dateObj) return 0;
-                if (!a.dateObj) return 1; // Null dates go to the end
-                if (!b.dateObj) return -1;
-                return b.dateObj.getTime() - a.dateObj.getTime();
-            });
-        }
-
-        function renderLecturesWithSearch(lecturesToDisplay) {
-            lecturesList.innerHTML = ''; // Clear previous content
-
-            // Add search bar
-            const searchContainer = document.createElement('div');
-            searchContainer.className = 'search-container';
-            searchContainer.innerHTML = `
-                <span class="search-icon">&#128269;</span>
-                <input type="text" id="lectureSearchInput" placeholder="Search lectures by topic...">
-            `;
-            lecturesList.appendChild(searchContainer);
-
-            const lectureSearchInput = searchContainer.querySelector('#lectureSearchInput');
-            lectureSearchInput.addEventListener('input', (event) => {
-                const searchTerm = event.target.value.toLowerCase();
-                const filtered = currentLectures.filter(lecture => 
-                    lecture.title.toLowerCase().includes(searchTerm)
-                );
-                displayLectureItems(filtered);
-            });
-
-            displayLectureItems(lecturesToDisplay); 
-        }
-
-        function displayLectureItems(lectures) {
-            let actualLectureItemsContainer = lecturesList.querySelector('#actual-lecture-items');
-            if (!actualLectureItemsContainer) {
-                actualLectureItemsContainer = document.createElement('div');
-                actualLectureItemsContainer.id = 'actual-lecture-items';
-                lecturesList.appendChild(actualLectureItemsContainer);
             }
-            actualLectureItemsContainer.innerHTML = ''; // Clear previous lecture items
 
-            if (lectures.length === 0) {
-                const noLecturesMsg = document.createElement('p');
-                noLecturesMsg.className = 'no-lectures-found';
-                noLecturesMsg.textContent = 'No lectures found matching your search.';
-                actualLectureItemsContainer.appendChild(noLecturesMsg);
-            } else {
-                lectures.forEach(lecture => {
+            function renderBatches(batches) {
+                batchesContainer.innerHTML = ''; // Clear loading message
+                batches.forEach((batch) => {
+                    const batchItem = document.createElement('div');
+                    batchItem.className = 'folder-item batch-item';
+                    batchItem.innerHTML = `
+                        <div class="folder-icon">&#128447;</div> <!-- Folder icon -->
+                        <div class="folder-name">${batch.batch_name}</div>
+                    `;
+                    batchesContainer.appendChild(batchItem);
+
+                    batchItem.addEventListener('click', () => {
+                        subjectsModalTitle.textContent = `Subjects for ${batch.batch_name}`;
+                        renderSubjects(batch.subjects, subjectsContainerModal);
+                        subjectsModal.style.display = 'flex'; // Show as flex to center
+                    });
+                });
+            }
+
+            function renderSubjects(subjects, targetDiv) {
+                targetDiv.innerHTML = ''; // Clear previous content
+                if (subjects.length === 0) {
+                    targetDiv.innerHTML = '<p>No subjects found for this batch.</p>';
+                    return;
+                }
+                subjects.forEach((subject) => {
+                    const subjectItem = document.createElement('div');
+                    subjectItem.className = 'folder-item subject-item';
+                    subjectItem.innerHTML = `
+                        <div class="folder-icon">&#128218;</div> <!-- Book icon -->
+                        <div class="folder-name">${subject.subject_name}</div>
+                    `;
+                    targetDiv.appendChild(subjectItem);
+
+                    subjectItem.addEventListener('click', () => {
+                        lecturesModalTitle.textContent = `Lectures for ${subject.subject_name}`;
+                        fetchLectures(subject.uid, lecturesContainerModal);
+                        lecturesModal.style.display = 'flex'; // Show as flex to center
+                    });
+                });
+            }
+
+            async function fetchLectures(uid, targetDiv) {
+                targetDiv.innerHTML = '<p class="loading">Fetching lectures for UID: ' + uid + '...</p>';
+                try {
+                    const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    const results = data.results || [];
+
+                    renderLectures(results, targetDiv);
+
+                } catch (error) {
+                    targetDiv.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
+                    console.error('Error fetching lectures:', error);
+                }
+            }
+
+            function renderLectures(results, targetDiv) {
+                if (results.length === 0) {
+                    targetDiv.innerHTML = '<p>No lectures found for this subject.</p>';
+                    return;
+                }
+
+                // Process and sort lectures
+                const processedLectures = results.map(item => {
+                    const value = item.value || {};
+                    const title = (value.title || "No Title").trim();
+                    const liveClass = value.live_class || {};
+                    const author = liveClass.author || {};
+                    const teacher = `${author.first_name || ''} ${author.last_name || ''}`.trim() || "Unknown";
+                    
+                    // *** CRITICAL CHANGE: Use liveAt instead of created_at ***
+                    const liveAt = liveClass.liveAt || ""; 
+                    const lectureDateObj = parseLectureDate(liveAt);
+                    
+                    // Format date for display
+                    const lectureDateStr = lectureDateObj ? lectureDateObj.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "Unknown Date";
+
+                    let downloadableVideoLink = null;
+                    const videoUrl = liveClass.video_url || "";
+                    if (videoUrl.includes("uid=")) {
+                        try {
+                            const videoUid = videoUrl.split("uid=")[1].split("&")[0];
+                            downloadableVideoLink = `https://uamedia.uacdn.net/lesson-raw/${videoUid}/output.webm`;
+                        } catch (e) {
+                            console.warn(`Could not parse video UID from ${videoUrl}: ${e}`);
+                        }
+                    }
+
+                    const slidesPdf = liveClass.slides_pdf || {};
+                    const pdfLink = slidesPdf.with_annotation || null;
+
+                    return {
+                        title,
+                        teacher,
+                        dateObj: lectureDateObj, // For sorting
+                        dateStr: lectureDateStr, // For display
+                        video_url: downloadableVideoLink,
+                        pdf_url: pdfLink
+                    };
+                });
+
+                // Sort lectures by date (newest first)
+                processedLectures.sort((a, b) => {
+                    if (!a.dateObj && !b.dateObj) return 0;
+                    if (!a.dateObj) return 1; // Null dates go to the end
+                    if (!b.dateObj) return -1;
+                    return b.dateObj.getTime() - a.dateObj.getTime(); // Newest first
+                });
+
+                targetDiv.innerHTML = ''; // Clear loading message
+
+                processedLectures.forEach(lecture => {
                     const lectureItem = document.createElement('div');
                     lectureItem.className = 'lecture-item';
                     lectureItem.innerHTML = `
@@ -669,23 +600,22 @@
                             ${lecture.pdf_url ? `<a href="${lecture.pdf_url}" download="${lecture.title}.pdf" class="pdf-link">Download PDF</a>` : ''}
                         </div>
                     `;
-                    actualLectureItemsContainer.appendChild(lectureItem);
+                    targetDiv.appendChild(lectureItem);
+                });
+
+                // Add event listeners for "Watch Online" buttons
+                targetDiv.querySelectorAll('.watch-online').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const videoUrl = event.target.dataset.videoUrl;
+                        lectureVideoPlayer.src = videoUrl;
+                        videoPlayerModal.style.display = 'flex';
+                        lectureVideoPlayer.play();
+                    });
                 });
             }
-            
-            actualLectureItemsContainer.querySelectorAll('.watch-online').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const videoUrl = event.target.dataset.videoUrl;
-                    lectureVideoPlayer.src = videoUrl;
-                    videoPlayerModal.style.display = 'flex';
-                    lectureVideoPlayer.play();
-                });
-            });
-        }
 
-        // Initial load
-        fetchBatches();
-        updateNavigation(); // Initialize navigation
+            fetchBatches();
+        });
     </script>
 </body>
 </html>
