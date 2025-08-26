@@ -424,10 +424,13 @@
             async function fetchLectures(uid, targetDiv) {
                 targetDiv.innerHTML = '<p class="loading">Fetching lectures for UID: ' + uid + '...</p>';
                 try {
-                    const url = `https://unacademy.com/api/v3/collection/${uid}/items?limit=600`;
+                    // *** MODIFIED LINE: Using a proxy serverless function ***
+                    const url = `/api/lectures?uid=${uid}`; // Calls your Vercel serverless function
                     const response = await fetch(url);
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        // Check for specific error messages from your proxy if it sends them
+                        const errorData = await response.json().catch(() => ({ message: response.statusText }));
+                        throw new Error(`HTTP error! status: ${response.status}, Details: ${errorData.message || 'Unknown error'}`);
                     }
                     const data = await response.json();
                     const results = data.results || [];
@@ -435,7 +438,7 @@
                     renderLectures(results, targetDiv);
 
                 } catch (error) {
-                    targetDiv.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to CORS policy or API issues.</p>`;
+                    targetDiv.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to issues with the proxy server or the Unacademy API.</p>`;
                     console.error('Error fetching lectures:', error);
                 }
             }
