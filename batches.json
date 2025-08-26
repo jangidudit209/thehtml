@@ -61,5 +61,188 @@
         "uid": "5IOWP8ZL"
       }
     ]
+  },
+  {
+    "batch_name": "Kota NEET UG 2026 Conquer 1",
+    "subjects": [
+      {
+        "subject_name": "Zoology",
+        "uid": "4D74Y91I"
+      },
+      {
+        "subject_name": "Organic Chemistry",
+        "uid": "PC5TKSML"
+      },
+      {
+        "subject_name": "Physics",
+        "uid": "S6QU2NXA"
+      },
+      {
+        "subject_name": "Physical Chemistry",
+        "uid": "TG3ORAWU"
+      },
+      {
+        "subject_name": "Zoology",
+        "uid": "GTNE6JAC"
+      },
+      {
+        "subject_name": "Organic Chemistry",
+        "uid": "WZIKULJI"
+      },
+      {
+        "subject_name": "Physics - II",
+        "uid": "JV7J5WUV"
+      }
+    ]
+  },
+  {
+    "batch_name": "Kota NEET UG 2026 Master Pro Plus",
+    "subjects": [
+      {
+        "subject_name": "Physics",
+        "uid": "4FTKSFCA"
+      },
+      {
+        "subject_name": "Physical Chemistry",
+        "uid": "85Y2BQ82"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "7K6P88WU"
+      }
+    ]
+  },
+  {
+    "batch_name": "Kota NEET UG 2027 Growth 1",
+    "subjects": [
+      {
+        "subject_name": "Zoology",
+        "uid": "O97GFUCX"
+      },
+      {
+        "subject_name": "Physics",
+        "uid": "7PO1TIBF"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "3W5XGVRV"
+      },
+      {
+        "subject_name": "Physical Chemistry",
+        "uid": "WGWZ33QP"
+      }
+    ]
+  },
+  {
+    "batch_name": "Kota NEET UG 2027 Growth 2",
+    "subjects": [
+      {
+        "subject_name": "Physical Chemistry",
+        "uid": "733BDD9B"
+      },
+      {
+        "subject_name": "Physics",
+        "uid": "U35SG5JG"
+      },
+      {
+        "subject_name": "Zoology",
+        "uid": "Z4QQ5W2K"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "6QMJYWEV"
+      }
+    ]
+  },
+  {
+    "batch_name": "Kota NEET UG 2026 Excel 1",
+    "subjects": [
+      {
+        "subject_name": "Inorganic Chemistry",
+        "uid": "GM2GXEU7"
+      },
+      {
+        "subject_name": "Zoology",
+        "uid": "SLX8EW8O"
+      },
+      {
+        "subject_name": "Physics",
+        "uid": "NA3ST3OV"
+      },
+      {
+        "subject_name": "Inorganic Chemistry II",
+        "uid": "277FQ5XV"
+      },
+      {
+        "subject_name": "Zoology II",
+        "uid": "MW4TRNT2"
+      },
+      {
+        "subject_name": "Physics II",
+        "uid": "U120QTWR"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "PQUZUKDJ"
+      },
+      {
+        "subject_name": "Botany II",
+        "uid": "1QEB3XKT"
+      },
+      {
+        "subject_name": "PHYSICS II",
+        "uid": "46PEZV81"
+      }
+    ]
+  },
+  {
+    "batch_name": "Kota NEET UG 2026 Excel 2",
+    "subjects": [
+      {
+        "subject_name": "Inorganic Chemistry",
+        "uid": "277FQ5XV"
+      },
+      {
+        "subject_name": "Zoology",
+        "uid": "MW4TRNT2"
+      },
+      {
+        "subject_name": "Physics",
+        "uid": "U120QTWR"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "1QEB3XKT"
+      },
+      {
+        "subject_name": "PHYSICS II",
+        "uid": "KQVAUXWN"
+      },
+      {
+        "subject_name": "PHYSICS EXTRA",
+        "uid": "LWEGCM15"
+      }
+    ]
+  },
+  {
+    "batch_name": "Kota NEET UG 2026 Excel 4 (H)",
+    "subjects": [
+      {
+        "subject_name": "Physics",
+        "uid": "CC9TQFZG"
+      },
+      {
+        "subject_name": "Zoology",
+        "uid": "XWOMEIL3"
+      },
+      {
+        "subject_name": "Botany",
+        "uid": "QD1MDJZ2"
+      },
+      {
+        "subject_name": "Physical Chemistry",
+        "uid": "CQK8IOSO"
+      }
+    ]
   }
 ]
