@@ -350,13 +350,18 @@
                     const batches = await response.json();
                     renderBatches(batches);
                 } catch (error) {
-                    batchesContainer.innerHTML = `<p class="error-message">Error loading batches: ${error.message}</p>`;
+                    batchesContainer.innerHTML = `<p class="error-message">Error loading batches: ${error.message}. Make sure 'batches.json' is accessible.</p>`;
                     console.error('Error fetching batches.json:', error);
                 }
             }
 
             function renderBatches(batches) {
                 batchesContainer.innerHTML = ''; // Clear loading message
+                if (batches.length === 0) {
+                    batchesContainer.innerHTML = '<p>No batches found in batches.json.</p>';
+                    return;
+                }
+
                 batches.forEach((batch, batchIndex) => {
                     const batchItem = document.createElement('div');
                     batchItem.className = 'folder-item batch-item';
@@ -390,6 +395,11 @@
 
             function renderSubjects(subjects, targetDiv) {
                 targetDiv.innerHTML = ''; // Clear loading message
+                if (subjects.length === 0) {
+                    targetDiv.innerHTML = '<p>No subjects found for this batch.</p>';
+                    return;
+                }
+
                 subjects.forEach((subject, subjectIndex) => {
                     const subjectItem = document.createElement('div');
                     subjectItem.className = 'folder-item subject-item';
@@ -424,28 +434,43 @@
             async function fetchLectures(uid, targetDiv) {
                 targetDiv.innerHTML = '<p class="loading">Fetching lectures for UID: ' + uid + '...</p>';
                 try {
-                    // *** MODIFIED LINE: Using a proxy serverless function ***
-                    const url = `/api/lectures?uid=${uid}`; // Calls your Vercel serverless function
+                    // *** CRITICAL: This assumes you have a Vercel Serverless Function at /api/lectures ***
+                    // This proxy helps bypass CORS issues and provides a more stable connection to Unacademy's API.
+                    const url = `/api/lectures?uid=${uid}`;
                     const response = await fetch(url);
+
                     if (!response.ok) {
-                        // Check for specific error messages from your proxy if it sends them
-                        const errorData = await response.json().catch(() => ({ message: response.statusText }));
-                        throw new Error(`HTTP error! status: ${response.status}, Details: ${errorData.message || 'Unknown error'}`);
+                        let errorMessage = `HTTP error! Status: ${response.status}`;
+                        try {
+                            const errorData = await response.json();
+                            if (errorData.error) {
+                                errorMessage += `, Details: ${errorData.error}`;
+                            }
+                            if (errorData.details) {
+                                errorMessage += ` (${errorData.details})`;
+                            }
+                        } catch (e) {
+                            // If response is not JSON, use status text
+                            errorMessage += `, Details: ${response.statusText}`;
+                        }
+                        throw new Error(errorMessage);
                     }
+
                     const data = await response.json();
                     const results = data.results || [];
 
                     renderLectures(results, targetDiv);
 
                 } catch (error) {
-                    targetDiv.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}. This might be due to issues with the proxy server or the Unacademy API.</p>`;
+                    targetDiv.innerHTML = `<p class="error-message">Error fetching lectures for UID ${uid}: ${error.message}.<br>
+                        Possible reasons: Unacademy API issues, incorrect UID, or proxy server not deployed/configured correctly.</p>`;
                     console.error('Error fetching lectures:', error);
                 }
             }
 
             function renderLectures(results, targetDiv) {
                 if (results.length === 0) {
-                    targetDiv.innerHTML = '<p>No lectures found for this subject.</p>';
+                    targetDiv.innerHTML = '<p>No lectures found for this subject. This might mean the UID is invalid, or Unacademy\'s API returned no data.</p>';
                     return;
                 }
 
